@@ -1,0 +1,25 @@
+import time
+from selenium import  webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://www.countries-ofthe-world.com/all-countries.html")
+driver.implicitly_wait(10)
+driver.maximize_window()
+
+#Give some time to load the page with all the webelement's
+time.sleep(3)
+
+#Scroll the page by pixcel.
+#1.JS code to scroll the page.
+driver.execute_script("window.scrollBy(0,3000)","")
+
+#To get the total numbers of pixcels moved after above JS code execution
+value = driver.execute_script("return window.pageYOffset;")
+print("Number pixecels moved : ",value)
+
+time.sleep(3)
+driver.close()
+
+

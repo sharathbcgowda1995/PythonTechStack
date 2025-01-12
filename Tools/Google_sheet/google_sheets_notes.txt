@@ -1,0 +1,7 @@
+-how to save
+-how to create sheets and how to change the name and color.
+-how to select the specific column and the row and the sheet.
+
+cmd+shif+left arrow -- to select the indexes which has the value.
+cmd+shift+down arrow  -- to select that column till last entry of it.
+

@@ -1,0 +1,1846 @@
+PSQL:
+
+To check the colum datya type :
+
+\practice=# \d person
+                                      Table "public.person"
+   Column   |          Type          | Collation | Nullable |              Default
+------------+------------------------+-----------+----------+------------------------------------
+ id         | bigint                 |           | not null | nextval('person_id_seq'::regclass)
+ first_name | character varying(200) |           | not null |
+ last_name  | character varying(200) |           | not null |
+ gender     | character varying(10)  |           | not null |
+ dob        | date                   |           | not null |
+ email      | character varying(100) |           |          |
+Indexes:
+    "person_pkey" PRIMARY KEY, btree (id)
+
+Create normal table :
+
+create table person(                                                                                                                                                                             id int,                                                                                                                                                                                                     first_name varchar(50),                                                                                                                                                                                     last_name varchar(50),                                                                                                                                                                                      gender varchar(50),                                                                                                                                                                                         dob TIMESTAMP);
+
+Create the table with constraints :	create table persons(                                                                                                                                                                            id bigint not null primary key,                                                                                                                                                                             first_name varchar(50) not null,                                                                                                                                                                            last_name varchar(50) not null,                                                                                                                                                                             gender varchar(10) not null,                                                                                                                                                                                dob date not null,email varchar(70));
+
+
+Insertion to the table :		insert into persons(                                                                                                                                                                           id,first_name,                                                                                                                                                                                              last_name,                                                                                                                                                                                                  gender,                                                                                                                                                                                                     dob,                                                                                                                                                                                                        email)                                                                                                                                                                                                      values('1','sharath','B C','Male','1995-11-21','sharathbcgowda2@gmail.com');
+
+To see the table schema: \d person
+
+To retrive the table data : select * from table_name;
+
+Order by : 	select * from persons order by first_name;
+		select * from persons order by id desc;
+		select * from persons order by id desc;
+		select * from persons order by id,email desc;
+
+Distinct :  select distinct gender from persons order by gender;
+
+
+Where : select * from persons where gender='Male’;
+
+where - and :  select * from persons where gender='Male' and country = 'Philippines’;
+
+where - and -or : select * from persons where gender='Male' and (country = 'Philippines' or country = 'China’);
+			   select * from persons where gender='Male' and (country = 'Philippines' or country = 'China') and last_name='Demanche’;
+
+Comparison :  select 2<>1;--t select 1>2;  —f
+		    select 'sharath'= ‘sharath’; -t
+
+
+Limit : 	select * from persons limit 10;
+
+
+offset and limit :
+
+practice=# select * from persons offset 10 limit 10;
+
+ id | first_name | last_name | gender |    dob     |           email           |   country
+----+------------+-----------+--------+------------+---------------------------+-------------
+ 11 | Lucina     | Cooke     | Female | 2021-09-13 | lcookea@eepurl.com        | China
+ 12 | Roxy       | Woodward  | Female | 2021-11-14 |                           | Pakistan
+ 13 | Kissiah    | Lummis    | Female | 2021-08-19 | klummisc@bloglines.com    | Indonesia
+ 14 | Lucius     | Demanche  | Male   | 2021-12-26 | ldemanched@friendfeed.com | Philippines
+ 15 | Con        | Ledwich   | Female | 2022-03-03 | cledwiche@youtu.be        | China
+ 16 | Emogene    | Chifney   | Female | 2022-02-03 | echifneyf@ocn.ne.jp       | Philippines
+ 17 | Heinrik    | Benza     | Male   | 2021-08-12 | hbenzag@trellian.com      | Sweden
+ 18 | Sarina     | Dallman   | Female | 2021-11-24 | sdallmanh@phpbb.com       | Guatemala
+ 19 | Agathe     | Timpany   | Female | 2022-01-13 | atimpanyi@utexas.edu      | Peru
+ 20 | Christiane | Ginnally  | Female | 2021-07-20 | cginnallyj@taobao.com     | Philippines
+(10 rows)
+
+
+practice=# select * from persons offset 45;
+ id | first_name |  last_name  |   gender    |    dob     |            email            |  country
+----+------------+-------------+-------------+------------+-----------------------------+------------
+ 46 | Theresa    | Egerton     | Genderfluid | 2022-01-12 |                             | Spain
+ 47 | Adelaide   | Gheorghescu | Female      | 2022-02-09 |                             | Brazil
+ 48 | Eulalie    | Biasioli    | Female      | 2022-03-11 |                             | Armenia
+ 49 | Julienne   | Domesday    | Female      | 2021-09-21 | jdomesday1c@arstechnica.com | Uruguay
+ 50 | Zara       | Bodell      | Genderfluid | 2021-05-14 | zbodell1d@oracle.com        | Costa Rica
+(5 rows)
+
+fetch first 5 row only — it works same as the limt and this is recommended by sql.
+
+practice=# select * from persons fetch first 5 row only;
+ id | first_name | last_name  | gender |    dob     |           email            | country
+----+------------+------------+--------+------------+----------------------------+---------
+  1 | Valera     | Hardstaff  | Female | 2022-01-02 |                            | Croatia
+  2 | Melisent   | McCleod    | Female | 2021-06-26 |                            | China
+  3 | Max        | Petchell   | Male   | 2021-06-25 |                            | Canada
+  4 | Niels      | Brooksbank | Male   | 2021-11-10 | nbrooksbank3@tumblr.com    | Russia
+  5 | Babb       | Staton     | Female | 2022-04-08 | bstaton4@deliciousdays.com | China
+(5 rows)
+
+
+IN :
+
+practice=# select * from persons where country='China'or country='Philippines' or country ='Indonesia';
+ id | first_name | last_name  |   gender    |    dob     |           email            |   country
+----+------------+------------+-------------+------------+----------------------------+-------------
+  2 | Melisent   | McCleod    | Female      | 2021-06-26 |                            | China
+  5 | Babb       | Staton     | Female      | 2022-04-08 | bstaton4@deliciousdays.com | China
+  6 | Bernete    | Wolffers   | Agender     | 2021-05-14 |                            | China
+  7 | Ardra      | Chasmar    | Female      | 2021-05-05 | achasmar6@foxnews.com      | China
+ 11 | Lucina     | Cooke      | Female      | 2021-09-13 | lcookea@eepurl.com         | China
+ 13 | Kissiah    | Lummis     | Female      | 2021-08-19 | klummisc@bloglines.com     | Indonesia
+ 14 | Lucius     | Demanche   | Male        | 2021-12-26 | ldemanched@friendfeed.com  | Philippines
+ 15 | Con        | Ledwich    | Female      | 2022-03-03 | cledwiche@youtu.be         | China
+ 16 | Emogene    | Chifney    | Female      | 2022-02-03 | echifneyf@ocn.ne.jp        | Philippines
+ 20 | Christiane | Ginnally   | Female      | 2021-07-20 | cginnallyj@taobao.com      | Philippines
+ 22 | Shirleen   | Cowin      | Genderfluid | 2021-10-29 |                            | Indonesia
+ 23 | Kristos    | Spellicy   | Male        | 2021-09-12 | kspellicym@theatlantic.com | Indonesia
+ 24 | Tracie     | Avramovitz | Male        | 2022-04-04 |                            | China
+ 31 | Dania      | Torricina  | Female      | 2021-11-29 |                            | China
+ 35 | Robinetta  | Learie     | Female      | 2022-04-19 |                            | Indonesia
+ 37 | Jasun      | Keyes      | Male        | 2021-07-17 | jkeyes10@google.it         | Indonesia
+ 42 | Berna      | Stock      | Female      | 2021-06-10 | bstock15@cisco.com         | China
+(17 rows)
+
+above long query in short using the ‘IN'
+
+practice=# select * from persons where country in('China','Indonesia','Philippines');                                                                                                                id | first_name | last_name  |   gender    |    dob     |           email            |   country
+----+------------+------------+-------------+------------+----------------------------+-------------
+  2 | Melisent   | McCleod    | Female      | 2021-06-26 |                            | China
+  5 | Babb       | Staton     | Female      | 2022-04-08 | bstaton4@deliciousdays.com | China
+  6 | Bernete    | Wolffers   | Agender     | 2021-05-14 |                            | China
+  7 | Ardra      | Chasmar    | Female      | 2021-05-05 | achasmar6@foxnews.com      | China
+ 11 | Lucina     | Cooke      | Female      | 2021-09-13 | lcookea@eepurl.com         | China
+ 13 | Kissiah    | Lummis     | Female      | 2021-08-19 | klummisc@bloglines.com     | Indonesia
+ 14 | Lucius     | Demanche   | Male        | 2021-12-26 | ldemanched@friendfeed.com  | Philippines
+ 15 | Con        | Ledwich    | Female      | 2022-03-03 | cledwiche@youtu.be         | China
+ 16 | Emogene    | Chifney    | Female      | 2022-02-03 | echifneyf@ocn.ne.jp        | Philippines
+ 20 | Christiane | Ginnally   | Female      | 2021-07-20 | cginnallyj@taobao.com      | Philippines
+ 22 | Shirleen   | Cowin      | Genderfluid | 2021-10-29 |                            | Indonesia
+ 23 | Kristos    | Spellicy   | Male        | 2021-09-12 | kspellicym@theatlantic.com | Indonesia
+ 24 | Tracie     | Avramovitz | Male        | 2022-04-04 |                            | China
+ 31 | Dania      | Torricina  | Female      | 2021-11-29 |                            | China
+ 35 | Robinetta  | Learie     | Female      | 2022-04-19 |                            | Indonesia
+ 37 | Jasun      | Keyes      | Male        | 2021-07-17 | jkeyes10@google.it         | Indonesia
+ 42 | Berna      | Stock      | Female      | 2021-06-10 | bstock15@cisco.com         | China
+(17 rows)
+
+
+
+between - and :
+
+select * from persons where dob between '2020-01-01' and '2022-01-01';
+ id | first_name | last_name  |   gender    |    dob     |            email            |    country
+----+------------+------------+-------------+------------+-----------------------------+----------------
+  2 | Melisent   | McCleod    | Female      | 2021-06-26 |                             | China
+  3 | Max        | Petchell   | Male        | 2021-06-25 |                             | Canada
+  4 | Niels      | Brooksbank | Male        | 2021-11-10 | nbrooksbank3@tumblr.com     | Russia
+  6 | Bernete    | Wolffers   | Agender     | 2021-05-14 |                             | China
+  7 | Ardra      | Chasmar    | Female      | 2021-05-05 | achasmar6@foxnews.com       | China
+ 10 | Rancell    | Qualtrough | Male        | 2021-08-29 | rqualtrough9@google.cn      | Russia
+ 11 | Lucina     | Cooke      | Female      | 2021-09-13 | lcookea@eepurl.com          | China
+ 12 | Roxy       | Woodward   | Female      | 2021-11-14 |                             | Pakistan
+ 13 | Kissiah    | Lummis     | Female      | 2021-08-19 | klummisc@bloglines.com      | Indonesia
+ 14 | Lucius     | Demanche   | Male        | 2021-12-26 | ldemanched@friendfeed.com   | Philippines
+ 17 | Heinrik    | Benza      | Male        | 2021-08-12 | hbenzag@trellian.com        | Sweden
+ 18 | Sarina     | Dallman    | Female      | 2021-11-24 | sdallmanh@phpbb.com         | Guatemala
+ 20 | Christiane | Ginnally   | Female      | 2021-07-20 | cginnallyj@taobao.com       | Philippines
+ 21 | Reinaldos  | Axup       | Male        | 2021-06-25 |                             | Brazil
+ 22 | Shirleen   | Cowin      | Genderfluid | 2021-10-29 |                             | Indonesia
+ 23 | Kristos    | Spellicy   | Male        | 2021-09-12 | kspellicym@theatlantic.com  | Indonesia
+ 25 | Rosanne    | Delion     | Female      | 2021-10-14 | rdeliono@senate.gov         | Iran
+ 26 | Toby       | Juckes     | Female      | 2021-08-01 | tjuckesp@blogger.com        | Canada
+ 27 | Andriette  | Shemwell   | Female      | 2021-11-12 | ashemwellq@vinaora.com      | Sweden
+ 29 | Cornelle   | Minchinden | Female      | 2021-09-07 | cminchindens@apache.org     | Sweden
+ 30 | Chrissy    | Rosling    | Female      | 2021-12-12 | croslingt@wisc.edu          | Brazil
+ 31 | Dania      | Torricina  | Female      | 2021-11-29 |                             | China
+ 32 | Myrtle     | Lulham     | Female      | 2021-12-02 | mlulhamv@sphinn.com         | Czech Republic
+ 33 | Jule       | Meachem    | Male        | 2021-11-27 | jmeachemw@moonfruit.com     | Portugal
+ 36 | Wendye     | Greenhowe  | Female      | 2021-08-25 | wgreenhowez@dedecms.com     | Japan
+ 37 | Jasun      | Keyes      | Male        | 2021-07-17 | jkeyes10@google.it          | Indonesia
+ 39 | Fancie     | Starbuck   | Female      | 2021-11-17 |                             | Turkmenistan
+ 40 | Basil      | Barnham    | Non-binary  | 2021-12-26 | bbarnham13@163.com          | Finland
+ 41 | Georges    | Fendt      | Male        | 2021-10-17 | gfendt14@slate.com          | Peru
+ 42 | Berna      | Stock      | Female      | 2021-06-10 | bstock15@cisco.com          | China
+ 43 | Jammie     | Treneman   | Female      | 2021-05-03 | jtreneman16@arizona.edu     | Panama
+ 44 | Collen     | Cicerone   | Female      | 2021-08-03 | ccicerone17@twitter.com     | Canada
+ 45 | Annetta    | Treeby     | Female      | 2021-12-11 |                             | Thailand
+ 49 | Julienne   | Domesday   | Female      | 2021-09-21 | jdomesday1c@arstechnica.com | Uruguay
+ 50 | Zara       | Bodell     | Genderfluid | 2021-05-14 | zbodell1d@oracle.com        | Costa Rica
+(35 rows)
+
+
+practice=# select * from persons where id between 20 and 30;
+ id | first_name | last_name  |   gender    |    dob     |             email              |   country
+----+------------+------------+-------------+------------+--------------------------------+-------------
+ 20 | Christiane | Ginnally   | Female      | 2021-07-20 | cginnallyj@taobao.com          | Philippines
+ 21 | Reinaldos  | Axup       | Male        | 2021-06-25 |                                | Brazil
+ 22 | Shirleen   | Cowin      | Genderfluid | 2021-10-29 |                                | Indonesia
+ 23 | Kristos    | Spellicy   | Male        | 2021-09-12 | kspellicym@theatlantic.com     | Indonesia
+ 24 | Tracie     | Avramovitz | Male        | 2022-04-04 |                                | China
+ 25 | Rosanne    | Delion     | Female      | 2021-10-14 | rdeliono@senate.gov            | Iran
+ 26 | Toby       | Juckes     | Female      | 2021-08-01 | tjuckesp@blogger.com           | Canada
+ 27 | Andriette  | Shemwell   | Female      | 2021-11-12 | ashemwellq@vinaora.com         | Sweden
+ 28 | Elga       | Bertolin   | Bigender    | 2022-04-28 | ebertolinr@acquirethisname.com | Portugal
+ 29 | Cornelle   | Minchinden | Female      | 2021-09-07 | cminchindens@apache.org        | Sweden
+ 30 | Chrissy    | Rosling    | Female      | 2021-12-12 | croslingt@wisc.edu             | Brazil
+(11 rows)
+
+
+
+LIKE : ending with some characters specified
+
+practice=# select * from persons where email like '%.edu';
+ id | first_name | last_name | gender |    dob     |          email          | country
+----+------------+-----------+--------+------------+-------------------------+---------
+ 19 | Agathe     | Timpany   | Female | 2022-01-13 | atimpanyi@utexas.edu    | Peru
+ 30 | Chrissy    | Rosling   | Female | 2021-12-12 | croslingt@wisc.edu      | Brazil
+ 43 | Jammie     | Treneman  | Female | 2021-05-03 | jtreneman16@arizona.edu | Panama
+(3 rows)
+
+
+middle words can also be specified to fetch the same records:
+
+practice=# select * from persons where email like '%@google%';
+ id | first_name | last_name  |   gender    |    dob     |         email          |    country
+----+------------+------------+-------------+------------+------------------------+----------------
+  9 | Row        | Brixey     | Genderfluid | 2022-03-29 | rbrixey8@google.de     | Czech Republic
+ 10 | Rancell    | Qualtrough | Male        | 2021-08-29 | rqualtrough9@google.cn | Russia
+ 37 | Jasun      | Keyes      | Male        | 2021-07-17 | jkeyes10@google.it     | Indonesia
+(3 rows)
+
+
+10 characters(used 10 underscores in that place’_') after @ email’s will be selected :
+
+practice=# select * from persons where email like '__________@%';
+ id | first_name | last_name |   gender   |    dob     |             email              |   country
+----+------------+-----------+------------+------------+--------------------------------+-------------
+ 14 | Lucius     | Demanche  | Male       | 2021-12-26 | ldemanched@friendfeed.com      | Philippines
+ 20 | Christiane | Ginnally  | Female     | 2021-07-20 | cginnallyj@taobao.com          | Philippines
+ 23 | Kristos    | Spellicy  | Male       | 2021-09-12 | kspellicym@theatlantic.com     | Indonesia
+ 27 | Andriette  | Shemwell  | Female     | 2021-11-12 | ashemwellq@vinaora.com         | Sweden
+ 28 | Elga       | Bertolin  | Bigender   | 2022-04-28 | ebertolinr@acquirethisname.com | Portugal
+ 40 | Basil      | Barnham   | Non-binary | 2021-12-26 | bbarnham13@163.com             | Finland
+(6 rows)
+
+
+Strting with letter ‘C’ :
+
+practice=# select * from persons where country like 'C%';
+ id | first_name | last_name  |   gender    |    dob     |           email            |    country
+----+------------+------------+-------------+------------+----------------------------+----------------
+  1 | Valera     | Hardstaff  | Female      | 2022-01-02 |                            | Croatia
+  2 | Melisent   | McCleod    | Female      | 2021-06-26 |                            | China
+  3 | Max        | Petchell   | Male        | 2021-06-25 |                            | Canada
+  5 | Babb       | Staton     | Female      | 2022-04-08 | bstaton4@deliciousdays.com | China
+  6 | Bernete    | Wolffers   | Agender     | 2021-05-14 |                            | China
+  7 | Ardra      | Chasmar    | Female      | 2021-05-05 | achasmar6@foxnews.com      | China
+  9 | Row        | Brixey     | Genderfluid | 2022-03-29 | rbrixey8@google.de         | Czech Republic
+ 11 | Lucina     | Cooke      | Female      | 2021-09-13 | lcookea@eepurl.com         | China
+ 15 | Con        | Ledwich    | Female      | 2022-03-03 | cledwiche@youtu.be         | China
+ 24 | Tracie     | Avramovitz | Male        | 2022-04-04 |                            | China
+ 26 | Toby       | Juckes     | Female      | 2021-08-01 | tjuckesp@blogger.com       | Canada
+ 31 | Dania      | Torricina  | Female      | 2021-11-29 |                            | China
+ 32 | Myrtle     | Lulham     | Female      | 2021-12-02 | mlulhamv@sphinn.com        | Czech Republic
+ 34 | Philip     | Hofer      | Male        | 2022-02-08 | phoferx@smh.com.au         | Cuba
+ 42 | Berna      | Stock      | Female      | 2021-06-10 | bstock15@cisco.com         | China
+ 44 | Collen     | Cicerone   | Female      | 2021-08-03 | ccicerone17@twitter.com    | Canada
+ 50 | Zara       | Bodell     | Genderfluid | 2021-05-14 | zbodell1d@oracle.com       | Costa Rica
+(17 rows)
+
+
+ILIKE : it ignores the cases but only like will consider
+
+
+practice=# select * from persons where country ilike 'c%';
+ id | first_name | last_name  |   gender    |    dob     |           email            |    country
+----+------------+------------+-------------+------------+----------------------------+----------------
+  1 | Valera     | Hardstaff  | Female      | 2022-01-02 |                            | Croatia
+  2 | Melisent   | McCleod    | Female      | 2021-06-26 |                            | China
+  3 | Max        | Petchell   | Male        | 2021-06-25 |                            | Canada
+  5 | Babb       | Staton     | Female      | 2022-04-08 | bstaton4@deliciousdays.com | China
+  6 | Bernete    | Wolffers   | Agender     | 2021-05-14 |                            | China
+  7 | Ardra      | Chasmar    | Female      | 2021-05-05 | achasmar6@foxnews.com      | China
+  9 | Row        | Brixey     | Genderfluid | 2022-03-29 | rbrixey8@google.de         | Czech Republic
+ 11 | Lucina     | Cooke      | Female      | 2021-09-13 | lcookea@eepurl.com         | China
+ 15 | Con        | Ledwich    | Female      | 2022-03-03 | cledwiche@youtu.be         | China
+ 24 | Tracie     | Avramovitz | Male        | 2022-04-04 |                            | China
+ 26 | Toby       | Juckes     | Female      | 2021-08-01 | tjuckesp@blogger.com       | Canada
+ 31 | Dania      | Torricina  | Female      | 2021-11-29 |                            | China
+ 32 | Myrtle     | Lulham     | Female      | 2021-12-02 | mlulhamv@sphinn.com        | Czech Republic
+ 34 | Philip     | Hofer      | Male        | 2022-02-08 | phoferx@smh.com.au         | Cuba
+ 42 | Berna      | Stock      | Female      | 2021-06-10 | bstock15@cisco.com         | China
+ 44 | Collen     | Cicerone   | Female      | 2021-08-03 | ccicerone17@twitter.com    | Canada
+ 50 | Zara       | Bodell     | Genderfluid | 2021-05-14 | zbodell1d@oracle.com       | Costa Rica
+(17 rows)
+
+
+
+GROUP BY :
+
+select country,count(*) from persons group by country;
+    country     | count
+----------------+-------
+ Indonesia      |     5
+ Czech Republic |     2
+ Sweden         |     3
+ Finland        |     1
+ Portugal       |     2
+ Cuba           |     1
+ Philippines    |     3
+ United States  |     1
+ China          |     9
+ Armenia        |     1
+ Spain          |     1
+ Thailand       |     1
+ Uruguay        |     1
+ Canada         |     3
+ Iran           |     1
+ Peru           |     2
+ Japan          |     1
+ Russia         |     2
+ Pakistan       |     1
+ Brazil         |     3
+ Guatemala      |     1
+ Panama         |     1
+ Turkmenistan   |     1
+ Croatia        |     1
+ Morocco        |     1
+ Costa Rica     |     1
+(26 rows)
+
+select country ,count(*) from persons group by country order by country;
+    country     | count
+----------------+-------
+ Armenia        |     1
+ Brazil         |     3
+ Canada         |     3
+ China          |     9
+ Costa Rica     |     1
+ Croatia        |     1
+ Cuba           |     1
+ Czech Republic |     2
+ Finland        |     1
+ Guatemala      |     1
+ Indonesia      |     5
+ Iran           |     1
+ Japan          |     1
+ Morocco        |     1
+ Pakistan       |     1
+ Panama         |     1
+ Peru           |     2
+ Philippines    |     3
+ Portugal       |     2
+ Russia         |     2
+ Spain          |     1
+ Sweden         |     3
+ Thailand       |     1
+ Turkmenistan   |     1
+ United States  |     1
+ Uruguay        |     1
+(26 rows)
+
+
+select country ,count(*) from persons group by country order by dob;
+ERROR:  column "persons.dob" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 1: ...ountry ,count(*) from persons group by country order by dob;
+
+
+
+GROUP BY HAVING Count(*)—:  HAVING should be used before the order by
+
+practice=# select country , count(*) from persons group by country having count(*)>2 order by country asc;
+   country   | count
+-------------+-------
+ Brazil      |     3
+ Canada      |     3
+ China       |     9
+ Indonesia   |     5
+ Philippines |     3
+ Sweden      |     3
+(6 rows)
+
+
+
+
+———————some of the major AGGREGATE functions———————
+Max,min,avg,sum,count,round(avg())
+
+Max(numerical col name)
+
+select max(price) from car;
+
+      max
+---------------
+ 9849155809.00
+(1 row)
+
+postgres=# select * from car where price=max(price);
+ERROR:  aggregate functions are not allowed in WHERE
+LINE 1: select * from car where price=max(price);
+                                      ^
+
+practice=# select min(price) from car;
+     min
+-------------
+ 44764316.00
+(1 row)
+
+practice=# select avg(price) from car;
+         avg
+---------------------
+ 5300660951.18000000
+(1 row)
+
+To count the total number of rows :
+
+practice=# select count(*) from car;
+ count
+-------
+    50
+(1 row)
+
+TO rounfd up the float values :
+
+practice=# select round(avg(price)) from car;
+   round
+------------
+ 5300660951
+(1 row)
+
+
+
+DOUBT :
+
+select make ,min(price) from car group by make ;
+     make      |      min
+---------------+---------------
+ Ford          |  276989112.00
+ Dodge         |  304348120.00
+ Audi          | 8306472500.00
+ Lexus         | 7327035559.00
+ Cadillac      | 4370542855.00
+ Maybach       | 9065610189.00
+ Lincoln       | 8114997672.00
+ Honda         | 1161494146.00
+ Chevrolet     | 3829587430.00
+ Kia           | 2462536132.00
+ Buick         | 4376092363.00
+ Mercury       | 3318752509.00
+ Toyota        | 8191471833.00
+ Pontiac       | 6637966428.00
+ Acura         | 4650344743.00
+ Mitsubishi    | 1243829001.00
+ Isuzu         | 4444741988.00
+ Saturn        | 9239052674.00
+ Lotus         | 2647143242.00
+ Mercedes-Benz | 6010819490.00
+ Oldsmobile    | 6689260674.00
+ Nissan        | 3625184370.00
+ Hyundai       |   44764316.00
+ Mazda         | 5227239649.00
+ Volkswagen    | 7343771965.00
+(25 rows)
+
+
+
+
+we have to select all the selected columns for the group by ….
+
+select make,model,min(price) from car group by make,model ;
+
+    |     model      |      min
+---------------+----------------+---------------
+ Dodge         | Grand Caravan  | 1288513674.00
+ Ford          | Club Wagon     | 2478128233.00
+ Honda         | Civic Si       | 6897858315.00
+ Mazda         | MX-5           | 9112553603.00
+ Ford          | E150           | 2792560673.00
+ Buick         | Riviera        | 4376092363.00
+ Nissan        | Xterra         | 3625184370.00
+ Honda         | CR-V           | 1161494146.00
+ Mazda         | CX-7           | 7301291981.00
+ Isuzu         | Axiom          | 9728013019.00
+ Hyundai       | Sonata         |   44764316.00
+ Volkswagen    | Scirocco       | 7343771965.00
+ Isuzu         | VehiCROSS      | 4444741988.00
+ Lexus         | IS-F           | 9623964129.00
+ Kia           | Sportage       | 4453590563.00
+ Mitsubishi    | Pajero         | 1243829001.00
+ Mercedes-Benz | C-Class        | 6010819490.00
+ Chevrolet     | Silverado 2500 | 5208227487.00
+ Maybach       | 57             | 9065610189.00
+ Saturn        | Ion            | 9239052674.00
+ Pontiac       | Vibe           | 6637966428.00
+ Acura         | TL             | 6391661863.00
+ Lotus         | Elan           | 2647143242.00
+ Oldsmobile    | Toronado       | 6689260674.00
+ Dodge         | Ram Van 2500   |  304348120.00
+ Ford          | Mustang        |  276989112.00
+ Lotus         | Esprit         | 5166320360.00
+ Cadillac      | STS            | 4370542855.00
+ Mazda         | Mazda6         | 5227239649.00
+ Kia           | Optima         | 2462536132.00
+ Acura         | Integra        | 4650344743.00
+ Dodge         | Dakota Club    | 5247426274.00
+ Chevrolet     | Impala         | 3829587430.00
+ Honda         | Element        | 9037079989.00
+ Lexus         | LX             | 7327035559.00
+ Chevrolet     | Express 2500   | 5581278938.00
+ Audi          | 100            | 8306472500.00
+ Audi          | A5             | 9297572499.00
+ Ford          | F-Series       | 1972387537.00
+ Toyota        | Echo           | 8191471833.00
+ Mercury       | Milan          | 3318752509.00
+ Mazda         | Miata MX-5     | 6433594204.00
+ Ford          | Fairlane       | 2684496234.00
+ Lincoln       | Town Car       | 8114997672.00
+ Ford          | Expedition     | 2961128056.00
+ Hyundai       | Veracruz       | 8637665403.00
+ Dodge         | Dynasty        | 2314954009.00
+ Hyundai       | Entourage      | 3240750201.00
+(48 rows)
+
+
+using sum :
+
+select make , sum(price) from car  group by make;
+     make      |      sum
+---------------+----------------
+ Ford          | 13165689845.00
+ Dodge         |  9155242077.00
+ Audi          | 17604044999.00
+ Lexus         | 16950999688.00
+ Cadillac      |  4370542855.00
+ Maybach       |  9065610189.00
+ Lincoln       |  8114997672.00
+ Honda         | 26945588259.00
+ Chevrolet     | 23041919401.00
+ Kia           |  6916126695.00
+ Buick         |  4376092363.00
+ Mercury       |  3318752509.00
+ Toyota        |  8191471833.00
+ Pontiac       |  6637966428.00
+ Acura         | 11042006606.00
+ Mitsubishi    |  1243829001.00
+ Isuzu         | 14172755007.00
+ Saturn        |  9239052674.00
+ Lotus         |  7813463602.00
+ Mercedes-Benz |  6010819490.00
+ Oldsmobile    |  6689260674.00
+ Nissan        |  3625184370.00
+ Hyundai       | 11923179920.00
+ Mazda         | 28074679437.00
+ Volkswagen    |  7343771965.00
+(25 rows)
+
+
+
+
+Arithmatic operators :
+
+practice=# select 10+2;
+ ?column?
+----------
+       12
+(1 row)
+
+practice=# select 10*2;
+ ?column?
+----------
+       20
+(1 row)
+
+practice=# select 10+2+30;
+ ?column?
+----------
+       42
+(1 row)
+
+practice=# select 10%5;
+ ?column?
+----------
+        0
+(1 row)
+
+practice=# select 10%3;
+ ?column?
+----------
+        1
+(1 row)
+
+practice=# select 10/2;
+ ?column?
+----------
+        5
+(1 row)
+
+practice=# select 10/3;
+ ?column?
+----------
+        3
+(1 row)
+
+
+Using the round and the arithmatic operators on column to perform some operations:
+
+practice=# select id ,make,model,price ,price*.10 from car;
+ id |     make      |     model      |     price     |    ?column?
+----+---------------+----------------+---------------+----------------
+  1 | Chevrolet     | Impala         | 8422825546.00 | 842282554.6000
+  2 | Mitsubishi    | Pajero         | 1243829001.00 | 124382900.1000
+  3 | Dodge         | Dynasty        | 2314954009.00 | 231495400.9000
+  4 | Lotus         | Esprit         | 5166320360.00 | 516632036.0000
+  5 | Hyundai       | Sonata         |   44764316.00 |   4476431.6000
+  6 | Kia           | Optima         | 2462536132.00 | 246253613.2000
+  7 | Lincoln       | Town Car       | 8114997672.00 | 811499767.2000
+  8 | Ford          | Fairlane       | 2684496234.00 | 268449623.4000
+  9 | Isuzu         | Axiom          | 9728013019.00 | 972801301.9000
+ 10 | Ford          | E150           | 2792560673.00 | 279256067.3000
+ 11 | Mercedes-Benz | C-Class        | 6010819490.00 | 601081949.0000
+ 12 | Honda         | Element        | 9037079989.00 | 903707998.9000
+ 13 | Toyota        | Echo           | 8191471833.00 | 819147183.3000
+ 14 | Honda         | CR-V           | 9849155809.00 | 984915580.9000
+ 15 | Dodge         | Grand Caravan  | 1288513674.00 | 128851367.4000
+ 16 | Lexus         | LX             | 7327035559.00 | 732703555.9000
+ 17 | Lotus         | Elan           | 2647143242.00 | 264714324.2000
+ 18 | Ford          | Expedition     | 2961128056.00 | 296112805.6000
+ 19 | Chevrolet     | Express 2500   | 5581278938.00 | 558127893.8000
+ 20 | Honda         | CR-V           | 1161494146.00 | 116149414.6000
+ 21 | Lexus         | IS-F           | 9623964129.00 | 962396412.9000
+ 22 | Acura         | Integra        | 4650344743.00 | 465034474.3000
+ 23 | Hyundai       | Entourage      | 3240750201.00 | 324075020.1000
+ 24 | Acura         | TL             | 6391661863.00 | 639166186.3000
+ 25 | Oldsmobile    | Toronado       | 6689260674.00 | 668926067.4000
+ 26 | Chevrolet     | Impala         | 3829587430.00 | 382958743.0000
+ 27 | Mazda         | Miata MX-5     | 6433594204.00 | 643359420.4000
+ 28 | Mazda         | Mazda6         | 5227239649.00 | 522723964.9000
+ 29 | Audi          | A5             | 9297572499.00 | 929757249.9000
+ 30 | Buick         | Riviera        | 4376092363.00 | 437609236.3000
+ 31 | Audi          | 100            | 8306472500.00 | 830647250.0000
+ 32 | Ford          | F-Series       | 1972387537.00 | 197238753.7000
+ 33 | Ford          | Club Wagon     | 2478128233.00 | 247812823.3000
+ 34 | Cadillac      | STS            | 4370542855.00 | 437054285.5000
+ 35 | Saturn        | Ion            | 9239052674.00 | 923905267.4000
+ 36 | Pontiac       | Vibe           | 6637966428.00 | 663796642.8000
+ 37 | Chevrolet     | Silverado 2500 | 5208227487.00 | 520822748.7000
+ 38 | Dodge         | Dakota Club    | 5247426274.00 | 524742627.4000
+ 39 | Mercury       | Milan          | 3318752509.00 | 331875250.9000
+ 40 | Maybach       | 57             | 9065610189.00 | 906561018.9000
+ 41 | Honda         | Civic Si       | 6897858315.00 | 689785831.5000
+ 42 | Nissan        | Xterra         | 3625184370.00 | 362518437.0000
+ 43 | Dodge         | Ram Van 2500   |  304348120.00 |  30434812.0000
+ 44 | Mazda         | CX-7           | 7301291981.00 | 730129198.1000
+ 45 | Hyundai       | Veracruz       | 8637665403.00 | 863766540.3000
+ 46 | Kia           | Sportage       | 4453590563.00 | 445359056.3000
+ 47 | Mazda         | MX-5           | 9112553603.00 | 911255360.3000
+ 48 | Volkswagen    | Scirocco       | 7343771965.00 | 734377196.5000
+ 49 | Isuzu         | VehiCROSS      | 4444741988.00 | 444474198.8000
+ 50 | Ford          | Mustang        |  276989112.00 |  27698911.2000
+(50 rows)
+
+practice=# select id ,make,model,price ,round(price*.10) from car;
+ id |     make      |     model      |     price     |   round
+----+---------------+----------------+---------------+-----------
+  1 | Chevrolet     | Impala         | 8422825546.00 | 842282555
+  2 | Mitsubishi    | Pajero         | 1243829001.00 | 124382900
+  3 | Dodge         | Dynasty        | 2314954009.00 | 231495401
+  4 | Lotus         | Esprit         | 5166320360.00 | 516632036
+  5 | Hyundai       | Sonata         |   44764316.00 |   4476432
+  6 | Kia           | Optima         | 2462536132.00 | 246253613
+  7 | Lincoln       | Town Car       | 8114997672.00 | 811499767
+  8 | Ford          | Fairlane       | 2684496234.00 | 268449623
+  9 | Isuzu         | Axiom          | 9728013019.00 | 972801302
+ 10 | Ford          | E150           | 2792560673.00 | 279256067
+ 11 | Mercedes-Benz | C-Class        | 6010819490.00 | 601081949
+ 12 | Honda         | Element        | 9037079989.00 | 903707999
+ 13 | Toyota        | Echo           | 8191471833.00 | 819147183
+ 14 | Honda         | CR-V           | 9849155809.00 | 984915581
+ 15 | Dodge         | Grand Caravan  | 1288513674.00 | 128851367
+ 16 | Lexus         | LX             | 7327035559.00 | 732703556
+ 17 | Lotus         | Elan           | 2647143242.00 | 264714324
+ 18 | Ford          | Expedition     | 2961128056.00 | 296112806
+ 19 | Chevrolet     | Express 2500   | 5581278938.00 | 558127894
+ 20 | Honda         | CR-V           | 1161494146.00 | 116149415
+ 21 | Lexus         | IS-F           | 9623964129.00 | 962396413
+ 22 | Acura         | Integra        | 4650344743.00 | 465034474
+ 23 | Hyundai       | Entourage      | 3240750201.00 | 324075020
+ 24 | Acura         | TL             | 6391661863.00 | 639166186
+ 25 | Oldsmobile    | Toronado       | 6689260674.00 | 668926067
+ 26 | Chevrolet     | Impala         | 3829587430.00 | 382958743
+ 27 | Mazda         | Miata MX-5     | 6433594204.00 | 643359420
+ 28 | Mazda         | Mazda6         | 5227239649.00 | 522723965
+ 29 | Audi          | A5             | 9297572499.00 | 929757250
+ 30 | Buick         | Riviera        | 4376092363.00 | 437609236
+ 31 | Audi          | 100            | 8306472500.00 | 830647250
+ 32 | Ford          | F-Series       | 1972387537.00 | 197238754
+ 33 | Ford          | Club Wagon     | 2478128233.00 | 247812823
+ 34 | Cadillac      | STS            | 4370542855.00 | 437054286
+ 35 | Saturn        | Ion            | 9239052674.00 | 923905267
+ 36 | Pontiac       | Vibe           | 6637966428.00 | 663796643
+ 37 | Chevrolet     | Silverado 2500 | 5208227487.00 | 520822749
+ 38 | Dodge         | Dakota Club    | 5247426274.00 | 524742627
+ 39 | Mercury       | Milan          | 3318752509.00 | 331875251
+ 40 | Maybach       | 57             | 9065610189.00 | 906561019
+ 41 | Honda         | Civic Si       | 6897858315.00 | 689785832
+ 42 | Nissan        | Xterra         | 3625184370.00 | 362518437
+ 43 | Dodge         | Ram Van 2500   |  304348120.00 |  30434812
+ 44 | Mazda         | CX-7           | 7301291981.00 | 730129198
+ 45 | Hyundai       | Veracruz       | 8637665403.00 | 863766540
+ 46 | Kia           | Sportage       | 4453590563.00 | 445359056
+ 47 | Mazda         | MX-5           | 9112553603.00 | 911255360
+ 48 | Volkswagen    | Scirocco       | 7343771965.00 | 734377197
+ 49 | Isuzu         | VehiCROSS      | 4444741988.00 | 444474199
+ 50 | Ford          | Mustang        |  276989112.00 |  27698911
+(50 rows)
+
+practice=# select id ,make,model,price ,round(price*.10,2) from car;
+ id |     make      |     model      |     price     |    round
+----+---------------+----------------+---------------+--------------
+  1 | Chevrolet     | Impala         | 8422825546.00 | 842282554.60
+  2 | Mitsubishi    | Pajero         | 1243829001.00 | 124382900.10
+  3 | Dodge         | Dynasty        | 2314954009.00 | 231495400.90
+  4 | Lotus         | Esprit         | 5166320360.00 | 516632036.00
+  5 | Hyundai       | Sonata         |   44764316.00 |   4476431.60
+  6 | Kia           | Optima         | 2462536132.00 | 246253613.20
+  7 | Lincoln       | Town Car       | 8114997672.00 | 811499767.20
+  8 | Ford          | Fairlane       | 2684496234.00 | 268449623.40
+  9 | Isuzu         | Axiom          | 9728013019.00 | 972801301.90
+ 10 | Ford          | E150           | 2792560673.00 | 279256067.30
+ 11 | Mercedes-Benz | C-Class        | 6010819490.00 | 601081949.00
+ 12 | Honda         | Element        | 9037079989.00 | 903707998.90
+ 13 | Toyota        | Echo           | 8191471833.00 | 819147183.30
+ 14 | Honda         | CR-V           | 9849155809.00 | 984915580.90
+ 15 | Dodge         | Grand Caravan  | 1288513674.00 | 128851367.40
+ 16 | Lexus         | LX             | 7327035559.00 | 732703555.90
+ 17 | Lotus         | Elan           | 2647143242.00 | 264714324.20
+ 18 | Ford          | Expedition     | 2961128056.00 | 296112805.60
+ 19 | Chevrolet     | Express 2500   | 5581278938.00 | 558127893.80
+ 20 | Honda         | CR-V           | 1161494146.00 | 116149414.60
+ 21 | Lexus         | IS-F           | 9623964129.00 | 962396412.90
+ 22 | Acura         | Integra        | 4650344743.00 | 465034474.30
+ 23 | Hyundai       | Entourage      | 3240750201.00 | 324075020.10
+ 24 | Acura         | TL             | 6391661863.00 | 639166186.30
+ 25 | Oldsmobile    | Toronado       | 6689260674.00 | 668926067.40
+ 26 | Chevrolet     | Impala         | 3829587430.00 | 382958743.00
+ 27 | Mazda         | Miata MX-5     | 6433594204.00 | 643359420.40
+ 28 | Mazda         | Mazda6         | 5227239649.00 | 522723964.90
+ 29 | Audi          | A5             | 9297572499.00 | 929757249.90
+ 30 | Buick         | Riviera        | 4376092363.00 | 437609236.30
+ 31 | Audi          | 100            | 8306472500.00 | 830647250.00
+ 32 | Ford          | F-Series       | 1972387537.00 | 197238753.70
+ 33 | Ford          | Club Wagon     | 2478128233.00 | 247812823.30
+ 34 | Cadillac      | STS            | 4370542855.00 | 437054285.50
+ 35 | Saturn        | Ion            | 9239052674.00 | 923905267.40
+ 36 | Pontiac       | Vibe           | 6637966428.00 | 663796642.80
+ 37 | Chevrolet     | Silverado 2500 | 5208227487.00 | 520822748.70
+ 38 | Dodge         | Dakota Club    | 5247426274.00 | 524742627.40
+ 39 | Mercury       | Milan          | 3318752509.00 | 331875250.90
+ 40 | Maybach       | 57             | 9065610189.00 | 906561018.90
+ 41 | Honda         | Civic Si       | 6897858315.00 | 689785831.50
+ 42 | Nissan        | Xterra         | 3625184370.00 | 362518437.00
+ 43 | Dodge         | Ram Van 2500   |  304348120.00 |  30434812.00
+ 44 | Mazda         | CX-7           | 7301291981.00 | 730129198.10
+ 45 | Hyundai       | Veracruz       | 8637665403.00 | 863766540.30
+ 46 | Kia           | Sportage       | 4453590563.00 | 445359056.30
+ 47 | Mazda         | MX-5           | 9112553603.00 | 911255360.30
+ 48 | Volkswagen    | Scirocco       | 7343771965.00 | 734377196.50
+ 49 | Isuzu         | VehiCROSS      | 4444741988.00 | 444474198.80
+ 50 | Ford          | Mustang        |  276989112.00 |  27698911.20
+(50 rows)
+
+
+10% off with the 2 decimal point , and then actual price after discount with the  2 decimal value.
+
+practice=# select id ,make,model,price ,round(price*.10,2),round(price-(price*.10),2) from car;
+ id |     make      |     model      |     price     |    round     |     round
+----+---------------+----------------+---------------+--------------+---------------
+  1 | Chevrolet     | Impala         | 8422825546.00 | 842282554.60 | 7580542991.40
+  2 | Mitsubishi    | Pajero         | 1243829001.00 | 124382900.10 | 1119446100.90
+  3 | Dodge         | Dynasty        | 2314954009.00 | 231495400.90 | 2083458608.10
+  4 | Lotus         | Esprit         | 5166320360.00 | 516632036.00 | 4649688324.00
+  5 | Hyundai       | Sonata         |   44764316.00 |   4476431.60 |   40287884.40
+  6 | Kia           | Optima         | 2462536132.00 | 246253613.20 | 2216282518.80
+  7 | Lincoln       | Town Car       | 8114997672.00 | 811499767.20 | 7303497904.80
+  8 | Ford          | Fairlane       | 2684496234.00 | 268449623.40 | 2416046610.60
+  9 | Isuzu         | Axiom          | 9728013019.00 | 972801301.90 | 8755211717.10
+ 10 | Ford          | E150           | 2792560673.00 | 279256067.30 | 2513304605.70
+ 11 | Mercedes-Benz | C-Class        | 6010819490.00 | 601081949.00 | 5409737541.00
+ 12 | Honda         | Element        | 9037079989.00 | 903707998.90 | 8133371990.10
+ 13 | Toyota        | Echo           | 8191471833.00 | 819147183.30 | 7372324649.70
+ 14 | Honda         | CR-V           | 9849155809.00 | 984915580.90 | 8864240228.10
+ 15 | Dodge         | Grand Caravan  | 1288513674.00 | 128851367.40 | 1159662306.60
+ 16 | Lexus         | LX             | 7327035559.00 | 732703555.90 | 6594332003.10
+ 17 | Lotus         | Elan           | 2647143242.00 | 264714324.20 | 2382428917.80
+ 18 | Ford          | Expedition     | 2961128056.00 | 296112805.60 | 2665015250.40
+ 19 | Chevrolet     | Express 2500   | 5581278938.00 | 558127893.80 | 5023151044.20
+ 20 | Honda         | CR-V           | 1161494146.00 | 116149414.60 | 1045344731.40
+ 21 | Lexus         | IS-F           | 9623964129.00 | 962396412.90 | 8661567716.10
+ 22 | Acura         | Integra        | 4650344743.00 | 465034474.30 | 4185310268.70
+ 23 | Hyundai       | Entourage      | 3240750201.00 | 324075020.10 | 2916675180.90
+ 24 | Acura         | TL             | 6391661863.00 | 639166186.30 | 5752495676.70
+ 25 | Oldsmobile    | Toronado       | 6689260674.00 | 668926067.40 | 6020334606.60
+ 26 | Chevrolet     | Impala         | 3829587430.00 | 382958743.00 | 3446628687.00
+ 27 | Mazda         | Miata MX-5     | 6433594204.00 | 643359420.40 | 5790234783.60
+ 28 | Mazda         | Mazda6         | 5227239649.00 | 522723964.90 | 4704515684.10
+ 29 | Audi          | A5             | 9297572499.00 | 929757249.90 | 8367815249.10
+ 30 | Buick         | Riviera        | 4376092363.00 | 437609236.30 | 3938483126.70
+ 31 | Audi          | 100            | 8306472500.00 | 830647250.00 | 7475825250.00
+ 32 | Ford          | F-Series       | 1972387537.00 | 197238753.70 | 1775148783.30
+ 33 | Ford          | Club Wagon     | 2478128233.00 | 247812823.30 | 2230315409.70
+ 34 | Cadillac      | STS            | 4370542855.00 | 437054285.50 | 3933488569.50
+ 35 | Saturn        | Ion            | 9239052674.00 | 923905267.40 | 8315147406.60
+ 36 | Pontiac       | Vibe           | 6637966428.00 | 663796642.80 | 5974169785.20
+ 37 | Chevrolet     | Silverado 2500 | 5208227487.00 | 520822748.70 | 4687404738.30
+ 38 | Dodge         | Dakota Club    | 5247426274.00 | 524742627.40 | 4722683646.60
+ 39 | Mercury       | Milan          | 3318752509.00 | 331875250.90 | 2986877258.10
+ 40 | Maybach       | 57             | 9065610189.00 | 906561018.90 | 8159049170.10
+ 41 | Honda         | Civic Si       | 6897858315.00 | 689785831.50 | 6208072483.50
+ 42 | Nissan        | Xterra         | 3625184370.00 | 362518437.00 | 3262665933.00
+ 43 | Dodge         | Ram Van 2500   |  304348120.00 |  30434812.00 |  273913308.00
+ 44 | Mazda         | CX-7           | 7301291981.00 | 730129198.10 | 6571162782.90
+ 45 | Hyundai       | Veracruz       | 8637665403.00 | 863766540.30 | 7773898862.70
+ 46 | Kia           | Sportage       | 4453590563.00 | 445359056.30 | 4008231506.70
+ 47 | Mazda         | MX-5           | 9112553603.00 | 911255360.30 | 8201298242.70
+ 48 | Volkswagen    | Scirocco       | 7343771965.00 | 734377196.50 | 6609394768.50
+ 49 | Isuzu         | VehiCROSS      | 4444741988.00 | 444474198.80 | 4000267789.20
+ 50 | Ford          | Mustang        |  276989112.00 |  27698911.20 |  249290200.80
+(50 rows)
+
+
+
+Aliyas (AS) : can be used to customise our own column name on existing or on any column which will appear as result as below.
+
+select id ,make,model,price as original_price ,round(price*.10,2) as ten_percent_price,round(price-(price*.10),2) as discounted_price from car;
+
+ id |     make      |     model      | original_price | ten_percent_price | discounted_price
+----+---------------+----------------+----------------+-------------------+------------------
+  1 | Chevrolet     | Impala         |  8422825546.00 |      842282554.60 |    7580542991.40
+  2 | Mitsubishi    | Pajero         |  1243829001.00 |      124382900.10 |    1119446100.90
+  3 | Dodge         | Dynasty        |  2314954009.00 |      231495400.90 |    2083458608.10
+  4 | Lotus         | Esprit         |  5166320360.00 |      516632036.00 |    4649688324.00
+  5 | Hyundai       | Sonata         |    44764316.00 |        4476431.60 |      40287884.40
+  6 | Kia           | Optima         |  2462536132.00 |      246253613.20 |    2216282518.80
+  7 | Lincoln       | Town Car       |  8114997672.00 |      811499767.20 |    7303497904.80
+  8 | Ford          | Fairlane       |  2684496234.00 |      268449623.40 |    2416046610.60
+  9 | Isuzu         | Axiom          |  9728013019.00 |      972801301.90 |    8755211717.10
+ 10 | Ford          | E150           |  2792560673.00 |      279256067.30 |    2513304605.70
+ 11 | Mercedes-Benz | C-Class        |  6010819490.00 |      601081949.00 |    5409737541.00
+ 12 | Honda         | Element        |  9037079989.00 |      903707998.90 |    8133371990.10
+ 13 | Toyota        | Echo           |  8191471833.00 |      819147183.30 |    7372324649.70
+ 14 | Honda         | CR-V           |  9849155809.00 |      984915580.90 |    8864240228.10
+ 15 | Dodge         | Grand Caravan  |  1288513674.00 |      128851367.40 |    1159662306.60
+ 16 | Lexus         | LX             |  7327035559.00 |      732703555.90 |    6594332003.10
+ 17 | Lotus         | Elan           |  2647143242.00 |      264714324.20 |    2382428917.80
+ 18 | Ford          | Expedition     |  2961128056.00 |      296112805.60 |    2665015250.40
+ 19 | Chevrolet     | Express 2500   |  5581278938.00 |      558127893.80 |    5023151044.20
+ 20 | Honda         | CR-V           |  1161494146.00 |      116149414.60 |    1045344731.40
+ 21 | Lexus         | IS-F           |  9623964129.00 |      962396412.90 |    8661567716.10
+ 22 | Acura         | Integra        |  4650344743.00 |      465034474.30 |    4185310268.70
+ 23 | Hyundai       | Entourage      |  3240750201.00 |      324075020.10 |    2916675180.90
+ 24 | Acura         | TL             |  6391661863.00 |      639166186.30 |    5752495676.70
+ 25 | Oldsmobile    | Toronado       |  6689260674.00 |      668926067.40 |    6020334606.60
+ 26 | Chevrolet     | Impala         |  3829587430.00 |      382958743.00 |    3446628687.00
+ 27 | Mazda         | Miata MX-5     |  6433594204.00 |      643359420.40 |    5790234783.60
+ 28 | Mazda         | Mazda6         |  5227239649.00 |      522723964.90 |    4704515684.10
+ 29 | Audi          | A5             |  9297572499.00 |      929757249.90 |    8367815249.10
+ 30 | Buick         | Riviera        |  4376092363.00 |      437609236.30 |    3938483126.70
+ 31 | Audi          | 100            |  8306472500.00 |      830647250.00 |    7475825250.00
+ 32 | Ford          | F-Series       |  1972387537.00 |      197238753.70 |    1775148783.30
+ 33 | Ford          | Club Wagon     |  2478128233.00 |      247812823.30 |    2230315409.70
+ 34 | Cadillac      | STS            |  4370542855.00 |      437054285.50 |    3933488569.50
+ 35 | Saturn        | Ion            |  9239052674.00 |      923905267.40 |    8315147406.60
+ 36 | Pontiac       | Vibe           |  6637966428.00 |      663796642.80 |    5974169785.20
+ 37 | Chevrolet     | Silverado 2500 |  5208227487.00 |      520822748.70 |    4687404738.30
+ 38 | Dodge         | Dakota Club    |  5247426274.00 |      524742627.40 |    4722683646.60
+ 39 | Mercury       | Milan          |  3318752509.00 |      331875250.90 |    2986877258.10
+ 40 | Maybach       | 57             |  9065610189.00 |      906561018.90 |    8159049170.10
+ 41 | Honda         | Civic Si       |  6897858315.00 |      689785831.50 |    6208072483.50
+ 42 | Nissan        | Xterra         |  3625184370.00 |      362518437.00 |    3262665933.00
+ 43 | Dodge         | Ram Van 2500   |   304348120.00 |       30434812.00 |     273913308.00
+ 44 | Mazda         | CX-7           |  7301291981.00 |      730129198.10 |    6571162782.90
+ 45 | Hyundai       | Veracruz       |  8637665403.00 |      863766540.30 |    7773898862.70
+ 46 | Kia           | Sportage       |  4453590563.00 |      445359056.30 |    4008231506.70
+ 47 | Mazda         | MX-5           |  9112553603.00 |      911255360.30 |    8201298242.70
+ 48 | Volkswagen    | Scirocco       |  7343771965.00 |      734377196.50 |    6609394768.50
+ 49 | Isuzu         | VehiCROSS      |  4444741988.00 |      444474198.80 |    4000267789.20
+ 50 | Ford          | Mustang        |   276989112.00 |       27698911.20 |     249290200.80
+(50 rows)
+
+COALESCE(columname ,what need to be passed):
+
+before coalesce:
+select * from persons;
+ id | first_name |  last_name  |   gender    |    dob     |             email              |    country
+----+------------+-------------+-------------+------------+--------------------------------+----------------
+  1 | Valera     | Hardstaff   | Female      | 2022-01-02 |                                | Croatia
+  2 | Melisent   | McCleod     | Female      | 2021-06-26 |                                | China
+  3 | Max        | Petchell    | Male        | 2021-06-25 |                                | Canada
+  4 | Niels      | Brooksbank  | Male        | 2021-11-10 | nbrooksbank3@tumblr.com        | Russia
+  5 | Babb       | Staton      | Female      | 2022-04-08 | bstaton4@deliciousdays.com     | China
+  6 | Bernete    | Wolffers    | Agender     | 2021-05-14 |                                | China
+  7 | Ardra      | Chasmar     | Female      | 2021-05-05 | achasmar6@foxnews.com          | China
+  8 | Milly      | Grouvel     | Female      | 2022-04-09 |                                | United States
+  9 | Row        | Brixey      | Genderfluid | 2022-03-29 | rbrixey8@google.de             | Czech Republic
+ 10 | Rancell    | Qualtrough  | Male        | 2021-08-29 | rqualtrough9@google.cn         | Russia
+ 11 | Lucina     | Cooke       | Female      | 2021-09-13 | lcookea@eepurl.com             | China
+ 12 | Roxy       | Woodward    | Female      | 2021-11-14 |                                | Pakistan
+ 13 | Kissiah    | Lummis      | Female      | 2021-08-19 | klummisc@bloglines.com         | Indonesia
+ 14 | Lucius     | Demanche    | Male        | 2021-12-26 | ldemanched@friendfeed.com      | Philippines
+ 15 | Con        | Ledwich     | Female      | 2022-03-03 | cledwiche@youtu.be             | China
+ 16 | Emogene    | Chifney     | Female      | 2022-02-03 | echifneyf@ocn.ne.jp            | Philippines
+ 17 | Heinrik    | Benza       | Male        | 2021-08-12 | hbenzag@trellian.com           | Sweden
+ 18 | Sarina     | Dallman     | Female      | 2021-11-24 | sdallmanh@phpbb.com            | Guatemala
+ 19 | Agathe     | Timpany     | Female      | 2022-01-13 | atimpanyi@utexas.edu           | Peru
+ 20 | Christiane | Ginnally    | Female      | 2021-07-20 | cginnallyj@taobao.com          | Philippines
+ 21 | Reinaldos  | Axup        | Male        | 2021-06-25 |                                | Brazil
+ 22 | Shirleen   | Cowin       | Genderfluid | 2021-10-29 |                                | Indonesia
+ 23 | Kristos    | Spellicy    | Male        | 2021-09-12 | kspellicym@theatlantic.com     | Indonesia
+ 24 | Tracie     | Avramovitz  | Male        | 2022-04-04 |                                | China
+ 25 | Rosanne    | Delion      | Female      | 2021-10-14 | rdeliono@senate.gov            | Iran
+ 26 | Toby       | Juckes      | Female      | 2021-08-01 | tjuckesp@blogger.com           | Canada
+ 27 | Andriette  | Shemwell    | Female      | 2021-11-12 | ashemwellq@vinaora.com         | Sweden
+ 28 | Elga       | Bertolin    | Bigender    | 2022-04-28 | ebertolinr@acquirethisname.com | Portugal
+ 29 | Cornelle   | Minchinden  | Female      | 2021-09-07 | cminchindens@apache.org        | Sweden
+ 30 | Chrissy    | Rosling     | Female      | 2021-12-12 | croslingt@wisc.edu             | Brazil
+ 31 | Dania      | Torricina   | Female      | 2021-11-29 |                                | China
+ 32 | Myrtle     | Lulham      | Female      | 2021-12-02 | mlulhamv@sphinn.com            | Czech Republic
+ 33 | Jule       | Meachem     | Male        | 2021-11-27 | jmeachemw@moonfruit.com        | Portugal
+ 34 | Philip     | Hofer       | Male        | 2022-02-08 | phoferx@smh.com.au             | Cuba
+ 35 | Robinetta  | Learie      | Female      | 2022-04-19 |                                | Indonesia
+ 36 | Wendye     | Greenhowe   | Female      | 2021-08-25 | wgreenhowez@dedecms.com        | Japan
+ 37 | Jasun      | Keyes       | Male        | 2021-07-17 | jkeyes10@google.it             | Indonesia
+ 38 | Gertruda   | Greenhalgh  | Female      | 2022-03-26 | ggreenhalgh11@yandex.ru        | Morocco
+ 39 | Fancie     | Starbuck    | Female      | 2021-11-17 |                                | Turkmenistan
+ 40 | Basil      | Barnham     | Non-binary  | 2021-12-26 | bbarnham13@163.com             | Finland
+ 41 | Georges    | Fendt       | Male        | 2021-10-17 | gfendt14@slate.com             | Peru
+ 42 | Berna      | Stock       | Female      | 2021-06-10 | bstock15@cisco.com             | China
+ 43 | Jammie     | Treneman    | Female      | 2021-05-03 | jtreneman16@arizona.edu        | Panama
+ 44 | Collen     | Cicerone    | Female      | 2021-08-03 | ccicerone17@twitter.com        | Canada
+ 45 | Annetta    | Treeby      | Female      | 2021-12-11 |                                | Thailand
+ 46 | Theresa    | Egerton     | Genderfluid | 2022-01-12 |                                | Spain
+ 47 | Adelaide   | Gheorghescu | Female      | 2022-02-09 |                                | Brazil
+ 48 | Eulalie    | Biasioli    | Female      | 2022-03-11 |                                | Armenia
+ 49 | Julienne   | Domesday    | Female      | 2021-09-21 | jdomesday1c@arstechnica.com    | Uruguay
+ 50 | Zara       | Bodell      | Genderfluid | 2021-05-14 | zbodell1d@oracle.com           | Costa Rica
+(50 rows)
+
+after coalesce :
+
+select coalesce(email,'To find the ROW  which has no email') from persons;
+              coalesce
+-------------------------------------
+ To find the ROW  which has no email
+ To find the ROW  which has no email
+ To find the ROW  which has no email
+ nbrooksbank3@tumblr.com
+ bstaton4@deliciousdays.com
+ To find the ROW  which has no email
+ achasmar6@foxnews.com
+ To find the ROW  which has no email
+ rbrixey8@google.de
+ rqualtrough9@google.cn
+ lcookea@eepurl.com
+ To find the ROW  which has no email
+ klummisc@bloglines.com
+ ldemanched@friendfeed.com
+ cledwiche@youtu.be
+ echifneyf@ocn.ne.jp
+ hbenzag@trellian.com
+ sdallmanh@phpbb.com
+ atimpanyi@utexas.edu
+ cginnallyj@taobao.com
+ To find the ROW  which has no email
+ To find the ROW  which has no email
+ kspellicym@theatlantic.com
+ To find the ROW  which has no email
+ rdeliono@senate.gov
+ tjuckesp@blogger.com
+ ashemwellq@vinaora.com
+ ebertolinr@acquirethisname.com
+ cminchindens@apache.org
+ croslingt@wisc.edu
+ To find the ROW  which has no email
+ mlulhamv@sphinn.com
+ jmeachemw@moonfruit.com
+ phoferx@smh.com.au
+ To find the ROW  which has no email
+ wgreenhowez@dedecms.com
+ jkeyes10@google.it
+ ggreenhalgh11@yandex.ru
+ To find the ROW  which has no email
+ bbarnham13@163.com
+ gfendt14@slate.com
+ bstock15@cisco.com
+ jtreneman16@arizona.edu
+ ccicerone17@twitter.com
+ To find the ROW  which has no email
+ To find the ROW  which has no email
+ To find the ROW  which has no email
+ To find the ROW  which has no email
+ jdomesday1c@arstechnica.com
+ zbodell1d@oracle.com
+(50 rows)
+
+NULLIF(1,1): it returns null as both args have equal val
+NULLIF(1,2):it returns 1 as both are not equal
+
+We can handle the below division by zero issue as below.
+
+practice=# select 10/0;
+ERROR:  division by zero
+
+practice=# select 10/nullif(0,0);
+ ?column?
+----------
+
+(1 row)
+
+practice=# select nullif(1,1);
+ nullif
+--------
+
+(1 row)
+
+practice=# select nullif(1,2);
+ nullif
+--------
+      1
+(1 row)
+
+
+practice=# select coalesce(10/nullif(0,0),0);
+ coalesce
+----------
+        0
+(1 row)
+
+
+DATE-TIME,DATE,TIME :
+
+practice=# select now();
+               now
+----------------------------------
+ 2022-04-30 14:51:24.037361+05:30
+(1 row)
+
+practice=# select now()::date;
+    now
+------------
+ 2022-04-30
+(1 row)
+
+practice=# select now()::time;
+       now
+-----------------
+ 14:51:44.350403
+(1 row)
+
+
+
+ADDITION AND SUBTRACTION BY YEARS,DAYS,MONTHS - YEAR,DATE,MONTH:
+NOW()— GIVES THE DATE AND TIME
+NOW()::DATE - GIVES ONLY DATE AS BELOW
+
+practice=# select now() + interval '10 years';
+             ?column?
+----------------------------------
+ 2032-04-30 14:57:48.293104+05:30
+(1 row)
+
+practice=# select now()::date + interval '10 year';
+      ?column?
+---------------------
+ 2032-04-30 00:00:00
+(1 row)
+
+practice=# select now()::date - interval '10 year';
+      ?column?
+---------------------
+ 2012-04-30 00:00:00
+(1 row)
+
+practice=# select now() - interval '10 years';
+             ?column?
+----------------------------------
+ 2012-04-30 14:59:08.743267+05:30
+(1 row)
+
+if you want the date in proper format as below then cast it :(The same applies to time as well)
+
+practice=# select (now() - interval '10 years')::date;
+    date
+------------
+ 2012-04-30
+(1 row)
+
+practice=# select (now() - interval '10 years')::time;
+     time
+---------------
+ 15:04:28.5717
+(1 row)
+
+
+Extracting fields like year , month ,date, dow,century from extract() function:
+
+practice=# select extract(year from now());
+ extract
+---------
+    2022
+(1 row)
+
+practice=# select extract(month from now());
+ extract
+---------
+       4
+(1 row)
+
+practice=# select extract(day from now());
+ extract
+---------
+      30
+(1 row)
+
+practice=# select extract(dow from now());
+ extract
+---------
+       6
+(1 row)
+
+practice=# select extract(century from now());
+ extract
+---------
+      21
+(1 row)
+
+
+AGE FUNCTION :
+
+we can also us the query as : select * , age(now(),dob) from persons;
+
+practice=# select first_name , gender , age(now(),dob) as age from persons;
+ first_name |   gender    |               age
+------------+-------------+---------------------------------
+ Valera     | Female      | 3 mons 28 days 15:15:06.707815
+ Melisent   | Female      | 10 mons 4 days 15:15:06.707815
+ Max        | Male        | 10 mons 5 days 15:15:06.707815
+ Niels      | Male        | 5 mons 20 days 15:15:06.707815
+ Babb       | Female      | 22 days 15:15:06.707815
+ Bernete    | Agender     | 11 mons 16 days 15:15:06.707815
+ Ardra      | Female      | 11 mons 25 days 15:15:06.707815
+ Milly      | Female      | 21 days 15:15:06.707815
+ Row        | Genderfluid | 1 mon 1 day 15:15:06.707815
+ Rancell    | Male        | 8 mons 1 day 15:15:06.707815
+ Lucina     | Female      | 7 mons 17 days 15:15:06.707815
+ Roxy       | Female      | 5 mons 16 days 15:15:06.707815
+ Kissiah    | Female      | 8 mons 11 days 15:15:06.707815
+ Lucius     | Male        | 4 mons 4 days 15:15:06.707815
+ Con        | Female      | 1 mon 27 days 15:15:06.707815
+ Emogene    | Female      | 2 mons 27 days 15:15:06.707815
+ Heinrik    | Male        | 8 mons 18 days 15:15:06.707815
+ Sarina     | Female      | 5 mons 6 days 15:15:06.707815
+ Agathe     | Female      | 3 mons 17 days 15:15:06.707815
+ Christiane | Female      | 9 mons 10 days 15:15:06.707815
+ Reinaldos  | Male        | 10 mons 5 days 15:15:06.707815
+ Shirleen   | Genderfluid | 6 mons 1 day 15:15:06.707815
+ Kristos    | Male        | 7 mons 18 days 15:15:06.707815
+ Tracie     | Male        | 26 days 15:15:06.707815
+ Rosanne    | Female      | 6 mons 16 days 15:15:06.707815
+ Toby       | Female      | 8 mons 29 days 15:15:06.707815
+ Andriette  | Female      | 5 mons 18 days 15:15:06.707815
+ Elga       | Bigender    | 2 days 15:15:06.707815
+ Cornelle   | Female      | 7 mons 23 days 15:15:06.707815
+ Chrissy    | Female      | 4 mons 18 days 15:15:06.707815
+ Dania      | Female      | 5 mons 1 day 15:15:06.707815
+ Myrtle     | Female      | 4 mons 28 days 15:15:06.707815
+ Jule       | Male        | 5 mons 3 days 15:15:06.707815
+ Philip     | Male        | 2 mons 22 days 15:15:06.707815
+ Robinetta  | Female      | 11 days 15:15:06.707815
+ Wendye     | Female      | 8 mons 5 days 15:15:06.707815
+ Jasun      | Male        | 9 mons 13 days 15:15:06.707815
+ Gertruda   | Female      | 1 mon 4 days 15:15:06.707815
+ Fancie     | Female      | 5 mons 13 days 15:15:06.707815
+ Basil      | Non-binary  | 4 mons 4 days 15:15:06.707815
+ Georges    | Male        | 6 mons 13 days 15:15:06.707815
+ Berna      | Female      | 10 mons 20 days 15:15:06.707815
+ Jammie     | Female      | 11 mons 27 days 15:15:06.707815
+ Collen     | Female      | 8 mons 27 days 15:15:06.707815
+ Annetta    | Female      | 4 mons 19 days 15:15:06.707815
+ Theresa    | Genderfluid | 3 mons 18 days 15:15:06.707815
+ Adelaide   | Female      | 2 mons 21 days 15:15:06.707815
+ Eulalie    | Female      | 1 mon 19 days 15:15:06.707815
+ Julienne   | Female      | 7 mons 9 days 15:15:06.707815
+ Zara       | Genderfluid | 11 mons 16 days 15:15:06.707815
+(50 rows)
+
+
+primary key :
+-we use the primary key to identify the data uniquely hence it can’t be duplicated.
+-if we want to make the existing table as primary key that’s not possible if the existing column data is duplicate.
+-hence if we want to make some column as PK we have to delete the duplicate data first then we can make that column as the PK as below.
+-once that column updated as the PK that column do’t allow the duplicate values.
+
+How to alter or delete the table ?
+we have altered or deleted the PK to have some duplicate data.
+
+practice=# \d car;
+                        Table "public.car"
+ Column |          Type          | Collation | Nullable | Default
+--------+------------------------+-----------+----------+---------
+ id     | bigint                 |           | not null |
+ make   | character varying(100) |           | not null |
+ model  | character varying(100) |           | not null |
+ price  | numeric(19,2)          |           | not null |
+Indexes:
+    "car_pkey" PRIMARY KEY, btree (id)
+
+practice=# select * from car limit 1;
+ id |   make    | model  |     price
+----+-----------+--------+---------------
+  1 | Chevrolet | Impala | 8422825546.00
+(1 row)
+
+practice=# insert into car (id, make, model, price) values (1, 'Chevrolet', 'Impala', '8422825546');
+ERROR:  duplicate key value violates unique constraint "car_pkey"
+DETAIL:  Key (id)=(1) already exists.
+
+                                        ^
+practice=# alter table car drop constraint car_pkey;
+ALTER TABLE
+
+After deleting the constraint PK from the table PK is not there in table:
+
+practice=# \d car;
+                        Table "public.car"
+ Column |          Type          | Collation | Nullable | Default
+--------+------------------------+-----------+----------+---------
+ id     | bigint                 |           | not null |
+ make   | character varying(100) |           | not null |
+ model  | character varying(100) |           | not null |
+ price  | numeric(19,2)          |           | not null |
+
+practice=#
+
+practice=# insert into car (id, make, model, price) values (1, 'Chevrolet', 'Impala', '8422825546');
+INSERT 0 1
+
+practice=# select * from car where id=1;
+ id |   make    | model  |     price
+----+-----------+--------+---------------
+  1 | Chevrolet | Impala | 8422825546.00
+  1 | Chevrolet | Impala | 8422825546.00
+(2 rows)
+
+
+Delete existing column data to update the column as PK :
+
+practice=# insert into car (id, make, model, price) values (1, 'Chevrolet', 'Impala', '8422825546');
+INSERT 0 1
+
+practice=# insert into car (id, make, model, price) values (1, 'Chevrolet', 'Impala', '8422825546');
+INSERT 0 1
+
+practice=# select * from car where id=1;
+ id |   make    | model  |     price
+----+-----------+--------+---------------
+  1 | Chevrolet | Impala | 8422825546.00
+  1 | Chevrolet | Impala | 8422825546.00
+(2 rows)
+
+practice=# alter table car add primary key (id);
+ERROR:  could not create unique index "car_pkey"
+DETAIL:  Key (id)=(1) is duplicated.
+
+practice=# delete from car where id = 1;
+DELETE 2
+
+practice=# alter table car add primary key (id);
+ALTER TABLE
+
+practice=# insert into car (id, make, model, price) values (1, 'Chevrolet', 'Impala', '8422825546');
+INSERT 0 1
+
+practice=# insert into car (id, make, model, price) values (1, 'Chevrolet', 'Impala', '8422825546');
+ERROR:  duplicate key value violates unique constraint "car_pkey"
+DETAIL:  Key (id)=(1) already exists.
+
+
+
+Unique constraints :  same like primary key incase of behaviour if we want to make any column as unique first we have to make none of the existig data is duplicate if yes need to update or drop that.
+
+practice=# alter table persons add constraint unique_email_id unique(email);
+ALTER TABLE
+
+practice=# insert into persons(id,first_name,last_name,gender,dob,email,country) values(51,'Nagu','Mukunda','feamale','1996-09-16','sharath@gmail.com','India');
+INSERT 0 1
+
+practice=# select * from persons where email='bbarnham13@163.com';
+ id | first_name | last_name |   gender   |    dob     |       email        | country
+----+------------+-----------+------------+------------+--------------------+---------
+ 40 | Basil      | Barnham   | Non-binary | 2021-12-26 | bbarnham13@163.com | Finland
+(1 row)
+
+practice=# insert into persons(id,first_name,last_name,gender,dob,email,country) values(51,'Nagu','Mukunda','male','1996-09-16','sharath@gmail.com','India');
+ERROR:  duplicate key value violates unique constraint "unique_email_id"
+DETAIL:  Key (email)=(sharath@gmail.com) already exists.
+
+practice=# \d persons;
+                       Table "public.persons"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ id         | integer               |           | not null |
+ first_name | character varying(50) |           |          |
+ last_name  | character varying(50) |           |          |
+ gender     | character varying(50) |           |          |
+ dob        | date                  |           |          |
+ email      | character varying(50) |           |          |
+ country    | character varying(50) |           |          |
+Indexes:
+    "persons_pkey" PRIMARY KEY, btree (id)
+    "unique_email_id" UNIQUE CONSTRAINT, btree (email)
+
+
+Check(define your conditions) : it allows to put a constraint on any column for specific set of data’s only and that column will not accept any other data to that column.
+
+practice=# select distinct gender from persons;
+   gender
+-------------
+ Hello
+ Bigender
+ Genderfluid
+ Male
+ Non-binary
+ Female
+ male
+ Agender
+(8 rows)
+
+Table should not accept any other column other than the below  mentioned gender:
+
+practice=# alter table persons add constraint check_gender check(gender='Hello'or gender='Agender' or gender='male' or gender='Female' or gender='Non-binary' or gender='Male' or gender='Genderfluid' or gender='Bigender')
+practice-# ;
+ALTER TABLE
+
+if we try any other data to the gender column then it gives the below error :
+
+practice=# insert into persons (id, first_name, last_name, gender, dob, email, country) values (1, 'Valera', 'Hardstaff', 'own_geneder', '2022-01-02', null, 'Croatia');
+ERROR:  new row for relation "persons" violates check constraint "check_gender"
+DETAIL:  Failing row contains (1, Valera, Hardstaff, own_geneder, 2022-01-02, null, Croatia).
+
+data column type :
+
+practice=# \d persons;
+                       Table "public.persons"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ id         | integer               |           | not null |
+ first_name | character varying(50) |           |          |
+ last_name  | character varying(50) |           |          |
+ gender     | character varying(50) |           |          |
+ dob        | date                  |           |          |
+ email      | character varying(50) |           |          |
+ country    | character varying(50) |           |          |
+Indexes:
+    "persons_pkey" PRIMARY KEY, btree (id)
+    "unique_email_id" UNIQUE CONSTRAINT, btree (email)
+
+Check constraints:
+    "check_gender" CHECK (gender::text = 'Hello'::text OR gender::text = 'Agender'::text OR gender::text = 'male'::text OR gender::text = 'Female'::text OR gender::text = 'Non-binary'::text OR gender::text = 'Male'::text OR gender::text = 'Genderfluid'::text OR gender::text = 'Bigender'::text)
+
+
+DELETE:
+
+we never use this on the production db.
+
+delete from persons; — it deletes all the records only the table structure will remain.
+delete from persons where gender=‘male’ and country=‘China’; — deletes the specific data.
+
+delete from tab_name where coulom_name=col_value and col_name=col_value;
+
+##UPDATE :
+- IF WE DON'T USE THE WHERE CLAUSE THEN THAT WILL UPDATE ALL THE COULMNS AND THE QUERY IS AS BELOW.
+[update persons set email = 'sharath@gmail.com';]
+
+-HENECE WE USE THE WHERE CLAUSE TO UPDATE THE SPECIFIC DATA.
+practice=# update persons set email = 'sharath@gmail.com' where id=21;
+UPDATE 1
+
+practice=# select * from persons where id=21;
+ id | first_name | last_name | gender |    dob     |       email       | country
+----+------------+-----------+--------+------------+-------------------+---------
+ 21 | Reinaldos  | Axup      | Male   | 2021-06-25 | sharath@gmail.com | Brazil
+(1 row)
+
+-WE CAN UPDATE THE MULPTIPLE COLUMNS OF THE SAME ROW DATA AS BELOW.
+practice=# update persons set first_name='Sharath' , last_name='Gowda',dob='1995-11-21' where id=21;
+UPDATE 1
+
+practice=# select * from persons where id=21;
+ id | first_name | last_name | gender |    dob     |       email       | country
+----+------------+-----------+--------+------------+-------------------+---------
+ 21 | Sharath    | Gowda     | Male   | 1995-11-21 | sharath@gmail.com | Brazil
+(1 row)
+
+##ON CONFLICT(CONSTRAINT_COL_NAME) DO NOTHING:
+
+-we get the errors like duplication while inserting the records to the table that time we candle those exception as below
+-we should only pass the constraint columns in the on conflict(--)
+
+practice=# insert into persons (id, first_name, last_name, gender, dob, email, country) values (1, 'Valera', 'Hardstaff', 'Male', '2022-01-02', null, 'Croatia');
+ERROR:  duplicate key value violates unique constraint "persons_pkey"
+DETAIL:  Key (id)=(1) already exists.
+
+practice=# insert into persons (id, first_name, last_name, gender, dob, email, country) values (1, 'Valera', 'Hardstaff', 'Male', '2022-01-02', null, 'Croatia') on conflict(id) do nothing;
+INSERT 0 0
+
+practice=# select * from persons where id=1;
+ id | first_name | last_name | gender |    dob     | email | country
+----+------------+-----------+--------+------------+-------+---------
+  1 | Valera     | Hardstaff | Hello  | 2022-01-02 |       | Croatia
+(1 row)
+
+-IF WE USE THE UNCONSTRAINT COL IN THE ON CONFLICT (--) WE GET THE BELOW ERROR:
+practice=# insert into persons (id, first_name, last_name, gender, dob, email, country) values (1, 'Valera', 'Hardstaff', 'Male', '2022-01-02', null, 'Croatia') on conflict(first_name) do nothing;
+ERROR:  there is no unique or exclusion constraint matching the ON CONFLICT specification
+
+##UPSERT :
+
+- it simply works like the update using where clause.
+
+practice=# insert into persons (id, first_name, last_name, gender, dob, email, country) values (1, 'Valera', 'Hardstaff', 'Male', '2022-01-02', 'sharathbc@gmail.com', 'India') on conflict(id) do update set email=excluded.email,country=excluded.country;
+INSERT 0 1
+
+practice=# select * from persons where id=1;
+ id | first_name | last_name | gender |    dob     |        email        | country
+----+------------+-----------+--------+------------+---------------------+---------
+  1 | Valera     | Hardstaff | Hello  | 2022-01-02 | sharathbc@gmail.com | India
+(1 row)
+
+-if we want we can update only one field as well.
+insert into persons (id, first_name, last_name, gender, dob, email, country) values (1, 'Valera', 'Hardstaff', 'Male', '2022-01-02', 'sharathbc@gmail.com', 'India') on conflict(id) do update set email=excluded.email;
+
+##FORIEGN_KEY :
+- foriegn key has below 3 rules.
+    1. it will point to PK of other table.
+    2. FK and PK of other table data type should be same.
+    3. create the table as below and first create the dependent table where we point the FK to PK
+
+table 1:person_d
+create table persons_d (id BIGSERIAL NOT NULL PRIMARY KEY,first_name VARCHAR(50),last_name VARCHAR(50),gender VARCHAR(50),
+dob DATE,email VARCHAR(50),country VARCHAR(50),car_id BIGINT REFERENCES car_d(id),UNIQUE(car_id));
+
+table 2:car-d
+create table car_d(
+	id BIGSERIAL NOT NULL PRIMARY KEY,
+	make VARCHAR(100),
+	model VARCHAR(100),
+	price NUMERIC(19,2) NOT NULL);
+
+-----Insertion to the persons_d
+insert into persons_d (id, first_name, last_name, gender, dob, email, country) values (1,'Valera', 'Hardstaff', 'Female', '2022-01-02', null, 'Croatia');
+insert into persons_d (id, first_name, last_name, gender, dob, email, country) values (2,'Melisent', 'McCleod', 'Female', '2021-06-26', null, 'China');
+
+-----Insertion to the car_d
+insert into car_d(make,model,price) values('Honda','2022-05-01',2000000);
+insert into car_d(make,model,price) values('VW','2021-01-01',2200000);
+
+#upadting the foriegn key
+-Foriegn key should have the unique values and ince assigned values can't be assigned to other records.
+
+practice=# update persons_d set car_id=2 where id=1;
+UPDATE 1
+
+practice=# select * from persons_d;
+ id | first_name | last_name | gender |    dob     | email | country | car_id
+----+------------+-----------+--------+------------+-------+---------+--------
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |       | China   |
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |       | Croatia |      2
+(2 rows)
+
+-Foriegn key should have the unique values and ince assigned values can't be assigned to other records.
+practice=# update persons_d set car_id=2 where id=2;
+ERROR:  duplicate key value violates unique constraint "persons_d_car_id_key"
+DETAIL:  Key (car_id)=(2) already exists.
+
+--Assigned the unique id present in car_d table.
+practice=# update persons_d set car_id=1 where id=2;
+UPDATE 1
+practice=# select * from persons_d;
+ id | first_name | last_name | gender |    dob     | email | country | car_id
+----+------------+-----------+--------+------------+-------+---------+--------
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |       | Croatia |      2
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |       | China   |      1
+(2 rows)
+
+--If we try to add the id to which is not in the car_d table to the person in persons_d table?
+
+practice=# update persons_d set car_id=3 where id=2;
+ERROR:  insert or update on table "persons_d" violates foreign key constraint "persons_d_car_id_fkey"
+DETAIL:  Key (car_id)=(3) is not present in table "car_d".
+
+##INNER JOIN :
+-- it will work if the two tables having relation of FK and PK .
+-- It will add those records which are having relation as mentioned above, if any of the record doesn't have any FK entry then
+that won't be considered.
+--For the BIGSERIAL data type if we dont pass the value in insertion and if we keep on executing the same query then that will be get executed from
+the beginning till the value which is free as below.
+
+practice=# insert into persons_d (first_name, last_name, gender, dob, email, country) values ('Nag', 'T M', 'Female', '1996-09-16', null, 'India');
+ERROR:  duplicate key value violates unique constraint "persons_d_pkey"
+DETAIL:  Key (id)=(1) already exists.
+practice=# insert into persons_d (first_name, last_name, gender, dob, email, country) values ('Nag', 'T M', 'Female', '1996-09-16', null, 'India');
+ERROR:  duplicate key value violates unique constraint "persons_d_pkey"
+DETAIL:  Key (id)=(2) already exists.
+practice=# insert into persons_d (first_name, last_name, gender, dob, email, country) values ('Nag', 'T M', 'Female', '1996-09-16', null, 'India');
+INSERT 0 1
+
+-- 3rd id was assigned then the records as below and we haven't updated the FK for this record intentionally to shows the joins.
+
+practice=# select * from persons_d;
+ id | first_name | last_name | gender |    dob     | email | country | car_id
+----+------------+-----------+--------+------------+-------+---------+--------
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |       | Croatia |      2
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |       | China   |      1
+  3 | Nag        | T M       | Female | 1996-09-16 |       | India   |
+(3 rows)
+
+--Performed the join and the records which were having the relation of FK and PK data are performed as below.
+
+practice=# select * from persons_d join car_d on persons_d.car_id=car_d.id;
+ id | first_name | last_name | gender |    dob     | email | country | car_id | id | make  |   model    |   price
+----+------------+-----------+--------+------------+-------+---------+--------+----+-------+------------+------------
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |       | China   |      1 |  1 | Honda | 2022-05-01 | 2000000.00
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |       | Croatia |      2 |  2 | VW    | 2021-01-01 | 2200000.00
+(2 rows)
+
+-- to view the data in different way then we can use \x:
+practice=# \x
+Expanded display is on.
+
+practice=# select * from persons_d join car_d on persons_d.car_id=car_d.id;
+-[ RECORD 1 ]----------
+id         | 2
+first_name | Melisent
+last_name  | McCleod
+gender     | Female
+dob        | 2021-06-26
+email      |
+country    | China
+car_id     | 1
+id         | 1
+make       | Honda
+model      | 2022-05-01
+price      | 2000000.00
+-[ RECORD 2 ]----------
+id         | 1
+first_name | Valera
+last_name  | Hardstaff
+gender     | Female
+dob        | 2022-01-02
+email      |
+country    | Croatia
+car_id     | 2
+id         | 2
+make       | VW
+model      | 2021-01-01
+price      | 2200000.00
+
+##SELECTION OF THE NEEDED COLUMNS USING JOIN AS BELOW :
+practice=# select persons_d.first_name , car_d.make from persons_d join car_d on persons_d.car_id=car_d.id;
+ first_name | make
+------------+-------
+ Melisent   | Honda
+ Valera     | VW
+(2 rows)
+
+---to turn off the display view in diff way is turned off.
+practice=# \x
+Expanded display is off.
+
+##LEFT JOIN :
+--It gives the both matching and unmatching records or the record which has no FK and PK data in it as below.
+--here the id 3 has no car_id but that still retrived in left join .
+
+practice=# select * from persons_d;
+ id | first_name | last_name | gender |    dob     | email | country | car_id
+----+------------+-----------+--------+------------+-------+---------+--------
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |       | Croatia |      2
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |       | China   |      1
+  3 | Nag        | T M       | Female | 1996-09-16 |       | India   |
+(3 rows)
+
+practice=# select * from persons_d left join car_d on persons_d.id=car_d.id;
+ id | first_name | last_name | gender |    dob     | email | country | car_id | id | make  |   model    |   price
+----+------------+-----------+--------+------------+-------+---------+--------+----+-------+------------+------------
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |       | Croatia |      2 |  1 | Honda | 2022-05-01 | 2000000.00
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |       | China   |      1 |  2 | VW    | 2021-01-01 | 2200000.00
+  3 | Nag        | T M       | Female | 1996-09-16 |       | India   |        |    |       |            |
+(3 rows)
+
+---Below query gives the record where the FK column has no data in it.
+
+practice=# select * from persons_d left join car_d on persons_d.id=car_d.id where car_d.* is null;
+ id | first_name | last_name | gender |    dob     | email | country | car_id | id | make | model | price
+----+------------+-----------+--------+------------+-------+---------+--------+----+------+-------+-------
+  3 | Nag        | T M       | Female | 1996-09-16 |       | India   |        |    |      |       |
+(1 row)
+
+
+#HOW TO DELETE THE RECORDS WITH FORIENGN KEYS ?
+-First del or unlink the foriegn key relationship with table record
+-Then try to delete the record which pointed to FK.
+
+practice=# select * from persons_d;
+ id | first_name | last_name | gender |    dob     | email | country | car_id
+----+------------+-----------+--------+------------+-------+---------+--------
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |       | Croatia |      2
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |       | China   |      1
+  3 | Nag        | T M       | Female | 1996-09-16 |       | India   |
+(3 rows)
+
+practice=# delete from car_d where id=2;
+ERROR:  update or delete on table "car_d" violates foreign key constraint "persons_d_car_id_fkey" on table "persons_d"
+DETAIL:  Key (id)=(2) is still referenced from table "persons_d".
+
+-After removing the relationshop with FK record.
+practice=# delete from car_d where id =2;
+DELETE 0
+
+## How to copy the query execution results in file in .csv format.
+practice=# practice=# \copy (select * from persons_d left join car_d on car_d.id=persons_d.car_id) to '/Users/sharath.bc/Desktop/result.csv' delimiter ',' csv header;
+COPY 3
+
+## BIGINT and BIGSERIAL :
+
+practice=# \d persons_d;
+                                     Table "public.persons_d"
+   Column   |         Type          | Collation | Nullable |                Default
+------------+-----------------------+-----------+----------+---------------------------------------
+ id         | bigint                |           | not null | nextval('persons_d_id_seq'::regclass)
+ first_name | character varying(50) |           |          |
+ last_name  | character varying(50) |           |          |
+ gender     | character varying(50) |           |          |
+ dob        | date                  |           |          |
+ email      | character varying(50) |           |          |
+ country    | character varying(50) |           |          |
+ car_id     | bigint                |           |          |
+Indexes:
+    "persons_d_pkey" PRIMARY KEY, btree (id)
+    "persons_d_car_id_key" UNIQUE CONSTRAINT, btree (car_id)
+Foreign-key constraints:
+    "persons_d_car_id_fkey" FOREIGN KEY (car_id) REFERENCES car_d(id)
+
+#To see details of bigint column status :
+practice=# select * from persons_d_id_seq;
+ last_value | log_cnt | is_called
+------------+---------+-----------
+          3 |      30 | t
+(1 row)
+
+practice=# select * from persons_d;
+ id | first_name | last_name | gender |    dob     | email | country | car_id
+----+------------+-----------+--------+------------+-------+---------+--------
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |       | Croatia |      2
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |       | China   |      1
+  3 | Nag        | T M       | Female | 1996-09-16 |       | India   |
+(3 rows)
+
+# To increase that data type column value by executing the below value.
+practice=# select nextval('persons_d_id_seq'::regclass);
+ nextval
+---------
+       4
+(1 row)
+
+practice=# select nextval('persons_d_id_seq'::regclass);
+ nextval
+---------
+       5
+(1 row)
+
+practice=# select nextval('persons_d_id_seq'::regclass);
+ nextval
+---------
+       6
+(1 row)
+
+# we can reset the bigint data type column val to some specific value.
+practice=# alter sequence persons_d_id_seq restart with 10;
+ALTER SEQUENCE
+
+# if we add the records after the above query execution it will add the data from that resetted number
+practice=# insert into persons_d(first_name,last_name,gender,dob,email,country) values('Lonely','Boy','Male','2022-05-03','lonely@broken.com','India');
+INSERT 0 1
+
+practice=# select * from persons_d;
+ id | first_name | last_name | gender |    dob     |       email       | country | car_id
+----+------------+-----------+--------+------------+-------------------+---------+--------
+  1 | Valera     | Hardstaff | Female | 2022-01-02 |                   | Croatia |      2
+  2 | Melisent   | McCleod   | Female | 2021-06-26 |                   | China   |      1
+  3 | Nag        | T M       | Female | 1996-09-16 |                   | India   |
+ 10 | Lonely     | Boy       | Male   | 2022-05-03 | lonely@broken.com | India   |
+(5 rows)
+
+
+##EXTENSIONS :
+
+-We have several extensions for our use.
+-To check the options for the some options where we can find the pg_available_extensions.
+select * from pg_a;#its actually not working.
+
+-To see all the exetensions.
+practice=# select * from pg_available_extensions;
+             name             | default_version | installed_version |                                                       comment
+------------------------------+-----------------+-------------------+---------------------------------------------------------------------------------------------------------------------
+ refint                       | 1.0             |                   | functions for implementing referential integrity (obsolete)
+ postgis                      | 3.1.5           |                   | PostGIS geometry and geography spatial types and functions
+ unaccent                     | 1.1             |                   | text search dictionary that removes accents
+ btree_gin                    | 1.3             |                   | support for indexing common datatypes in GIN
+ plpython3u                   | 1.0             |                   | PL/Python3U untrusted procedural language
+ ltree                        | 1.2             |                   | data type for hierarchical tree-like structures
+ tsm_system_rows              | 1.0             |                   | TABLESAMPLE method which accepts number of rows as a limit
+ ltree_plpythonu              | 1.0             |                   | transform between ltree and plpythonu
+ adminpack                    | 2.1             |                   | administrative functions for PostgreSQL
+ dict_xsyn                    | 1.0             |                   | text search dictionary template for extended synonym processing
+ address_standardizer         | 3.1.5           |                   | Used to parse an address into constituent elements. Generally used to support geocoding address normalization step.
+ xml2                         | 1.1             |                   | XPath querying and XSLT
+ hstore                       | 1.8             |                   | data type for storing sets of (key, value) pairs
+ pg_visibility                | 1.2             |                   | examine the visibility map (VM) and page-level visibility info
+ cube                         | 1.5             |                   | data type for multidimensional cubes
+ postgis_tiger_geocoder       | 3.1.5           |                   | PostGIS tiger geocoder and reverse geocoder
+ seg                          | 1.4             |                   | data type for representing line segments or floating-point intervals
+ intagg                       | 1.1             |                   | integer aggregator and enumerator (obsolete)
+ tcn                          | 1.0             |                   | Triggered change notifications
+ isn                          | 1.2             |                   | data types for international product numbering standards
+ tsm_system_time              | 1.0             |                   | TABLESAMPLE method which accepts time in milliseconds as a limit
+ lo                           | 1.1             |                   | Large Object maintenance
+ pgrowlocks                   | 1.2             |                   | show row-level locking information
+ jsonb_plpython2u             | 1.0             |                   | transform between jsonb and plpython2u
+ jsonb_plpython3u             | 1.0             |                   | transform between jsonb and plpython3u
+ sslinfo                      | 1.2             |                   | information about SSL certificates
+ pgstattuple                  | 1.5             |                   | show tuple-level statistics
+ autoinc                      | 1.0             |                   | functions for autoincrementing fields
+ address_standardizer_data_us | 3.1.5           |                   | Address Standardizer US dataset example
+ hstore_plpython3u            | 1.0             |                   | transform between hstore and plpython3u
+ hstore_plpython2u            | 1.0             |                   | transform between hstore and plpython2u
+ postgis_topology             | 3.1.5           |                   | PostGIS topology spatial types and functions
+ postgis_raster               | 3.1.5           |                   | PostGIS raster types and functions
+ pg_freespacemap              | 1.2             |                   | examine the free space map (FSM)
+ file_fdw                     | 1.0             |                   | foreign-data wrapper for flat file access
+ pg_surgery                   | 1.0             |                   | extension to perform surgery on a damaged relation
+ pg_buffercache               | 1.3             |                   | examine the shared buffer cache
+ dblink                       | 1.2             |                   | connect to other PostgreSQL databases from within a database
+ pg_stat_statements           | 1.9             |                   | track planning and execution statistics of all SQL statements executed
+ insert_username              | 1.0             |                   | functions for tracking who changed a table
+ pg_prewarm                   | 1.2             |                   | prewarm relation data
+ old_snapshot                 | 1.0             |                   | utilities in support of old_snapshot_threshold
+ earthdistance                | 1.1             |                   | calculate great-circle distances on the surface of the Earth
+ uuid-ossp                    | 1.1             |                   | generate universally unique identifiers (UUIDs)
+ intarray                     | 1.5             |                   | functions, operators, and index support for 1-D arrays of integers
+ pg_trgm                      | 1.6             |                   | text similarity measurement and index searching based on trigrams
+ dict_int                     | 1.0             |                   | text search dictionary template for integers
+ amcheck                      | 1.3             |                   | functions for verifying relation integrity
+ jsonb_plpythonu              | 1.0             |                   | transform between jsonb and plpythonu
+ btree_gist                   | 1.6             |                   | support for indexing common datatypes in GiST
+ pageinspect                  | 1.9             |                   | inspect the contents of database pages at a low level
+ moddatetime                  | 1.0             |                   | functions for tracking last modification time
+ fuzzystrmatch                | 1.1             |                   | determine similarities and distance between strings
+ ltree_plpython3u             | 1.0             |                   | transform between ltree and plpython3u
+ ltree_plpython2u             | 1.0             |                   | transform between ltree and plpython2u
+ pldbgapi                     | 1.1             |                   | server-side support for debugging PL/pgSQL functions
+ pgcrypto                     | 1.3             |                   | cryptographic functions
+ tablefunc                    | 1.0             |                   | functions that manipulate whole tables, including crosstab
+ postgres_fdw                 | 1.1             |                   | foreign-data wrapper for remote PostgreSQL servers
+ bloom                        | 1.0             |                   | bloom access method - signature file based index
+ hstore_plpythonu             | 1.0             |                   | transform between hstore and plpythonu
+ citext                       | 1.6             |                   | data type for case-insensitive character strings
+ plpgsql                      | 1.0             | 1.0               | PL/pgSQL procedural language
+(63 rows)
+
+--To install the extensions :
+practice=# create extension if not exists "uuid-ossp";
+CREATE EXTENSION
+
+--To check whether the extension has been added or not run the below query and chck the installed version column
+practice=# select * from pg_available_extensions;
+             name             | default_version | installed_version |                                                       comment
+------------------------------+-----------------+-------------------+---------------------------------------------------------------------------------------------------------------------
+ refint                       | 1.0             |                   | functions for implementing referential integrity (obsolete)
+ postgis                      | 3.1.5           |                   | PostGIS geometry and geography spatial types and functions
+ unaccent                     | 1.1             |                   | text search dictionary that removes accents
+ btree_gin                    | 1.3             |                   | support for indexing common datatypes in GIN
+ plpython3u                   | 1.0             |                   | PL/Python3U untrusted procedural language
+ ltree                        | 1.2             |                   | data type for hierarchical tree-like structures
+ tsm_system_rows              | 1.0             |                   | TABLESAMPLE method which accepts number of rows as a limit
+ ltree_plpythonu              | 1.0             |                   | transform between ltree and plpythonu
+ adminpack                    | 2.1             |                   | administrative functions for PostgreSQL
+ dict_xsyn                    | 1.0             |                   | text search dictionary template for extended synonym processing
+ address_standardizer         | 3.1.5           |                   | Used to parse an address into constituent elements. Generally used to support geocoding address normalization step.
+ xml2                         | 1.1             |                   | XPath querying and XSLT
+ hstore                       | 1.8             |                   | data type for storing sets of (key, value) pairs
+ pg_visibility                | 1.2             |                   | examine the visibility map (VM) and page-level visibility info
+ cube                         | 1.5             |                   | data type for multidimensional cubes
+ postgis_tiger_geocoder       | 3.1.5           |                   | PostGIS tiger geocoder and reverse geocoder
+ seg                          | 1.4             |                   | data type for representing line segments or floating-point intervals
+ intagg                       | 1.1             |                   | integer aggregator and enumerator (obsolete)
+ tcn                          | 1.0             |                   | Triggered change notifications
+ isn                          | 1.2             |                   | data types for international product numbering standards
+ tsm_system_time              | 1.0             |                   | TABLESAMPLE method which accepts time in milliseconds as a limit
+ lo                           | 1.1             |                   | Large Object maintenance
+ pgrowlocks                   | 1.2             |                   | show row-level locking information
+ jsonb_plpython2u             | 1.0             |                   | transform between jsonb and plpython2u
+ jsonb_plpython3u             | 1.0             |                   | transform between jsonb and plpython3u
+ sslinfo                      | 1.2             |                   | information about SSL certificates
+ pgstattuple                  | 1.5             |                   | show tuple-level statistics
+ autoinc                      | 1.0             |                   | functions for autoincrementing fields
+ address_standardizer_data_us | 3.1.5           |                   | Address Standardizer US dataset example
+ hstore_plpython3u            | 1.0             |                   | transform between hstore and plpython3u
+ hstore_plpython2u            | 1.0             |                   | transform between hstore and plpython2u
+ postgis_topology             | 3.1.5           |                   | PostGIS topology spatial types and functions
+ postgis_raster               | 3.1.5           |                   | PostGIS raster types and functions
+ pg_freespacemap              | 1.2             |                   | examine the free space map (FSM)
+ file_fdw                     | 1.0             |                   | foreign-data wrapper for flat file access
+ pg_surgery                   | 1.0             |                   | extension to perform surgery on a damaged relation
+ pg_buffercache               | 1.3             |                   | examine the shared buffer cache
+ dblink                       | 1.2             |                   | connect to other PostgreSQL databases from within a database
+ pg_stat_statements           | 1.9             |                   | track planning and execution statistics of all SQL statements executed
+ insert_username              | 1.0             |                   | functions for tracking who changed a table
+ pg_prewarm                   | 1.2             |                   | prewarm relation data
+ old_snapshot                 | 1.0             |                   | utilities in support of old_snapshot_threshold
+ earthdistance                | 1.1             |                   | calculate great-circle distances on the surface of the Earth
+ uuid-ossp                    | 1.1             | 1.1               | generate universally unique identifiers (UUIDs)
+ intarray                     | 1.5             |                   | functions, operators, and index support for 1-D arrays of integers
+ pg_trgm                      | 1.6             |                   | text similarity measurement and index searching based on trigrams
+ dict_int                     | 1.0             |                   | text search dictionary template for integers
+ amcheck                      | 1.3             |                   | functions for verifying relation integrity
+ jsonb_plpythonu              | 1.0             |                   | transform between jsonb and plpythonu
+ btree_gist                   | 1.6             |                   | support for indexing common datatypes in GiST
+ pageinspect                  | 1.9             |                   | inspect the contents of database pages at a low level
+ moddatetime                  | 1.0             |                   | functions for tracking last modification time
+ fuzzystrmatch                | 1.1             |                   | determine similarities and distance between strings
+ ltree_plpython3u             | 1.0             |                   | transform between ltree and plpython3u
+ ltree_plpython2u             | 1.0             |                   | transform between ltree and plpython2u
+ pldbgapi                     | 1.1             |                   | server-side support for debugging PL/pgSQL functions
+ pgcrypto                     | 1.3             |                   | cryptographic functions
+ tablefunc                    | 1.0             |                   | functions that manipulate whole tables, including crosstab
+ postgres_fdw                 | 1.1             |                   | foreign-data wrapper for remote PostgreSQL servers
+ bloom                        | 1.0             |                   | bloom access method - signature file based index
+ hstore_plpythonu             | 1.0             |                   | transform between hstore and plpythonu
+ citext                       | 1.6             |                   | data type for case-insensitive character strings
+ plpgsql                      | 1.0             | 1.0               | PL/pgSQL procedural language
+(63 rows)
+

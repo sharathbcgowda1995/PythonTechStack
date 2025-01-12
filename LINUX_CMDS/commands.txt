@@ -1,0 +1,61 @@
+Linux commands :
+
+Open the terminal in MAC :
+
+1.pwd
+pep working directory to get the path where we are currently pointing to.
+
+2.ls
+to list all the files present in that directory.
+
+3.cd downloads
+cd change directory downloads is a folder name (we have to start from the finder home folders).
+
+4.ls -a
+to see some hidden files.
+
+5.ls -l
+to get more details of the file
+
+6.ls -la
+to see the details of the hidden file.
+
+7.
+cd . current dir
+Cd .. parent dir
+. one dot is current directory and
+.. two dots are parent directory.
+
+8.ls Documents
+To check what are all the files present in that folder.(we can use it anytime , no need to navigate to that folder to use this command)
+
+9.cd Documents/screen_shots
+we can in a single command itself can navigate to the exact folder as above by using fwd slash and that file name.
+
+10.
+sharath.bc@Sharath-BCs-MacBook-Air ~ % cd Documents/screen_shots
+sharath.bc@Sharath-BCs-MacBook-Air screen_shots % pwd
+/Users/sharath.bc/Documents/screen_shots
+
+to come back in single command :
+
+cd ../..
+sharath.bc@Sharath-BCs-MacBook-Air ~ % pwd
+/Users/sharath.bc
+
+
+11.we can directly come back to home directory from anywhere in the mid of the folder using ‘~’
+
+sharath.bc@Sharath-BCs-MacBook-Air ~ % cd Documents/screen_shots
+sharath.bc@Sharath-BCs-MacBook-Air screen_shots % cd ~
+sharath.bc@Sharath-BCs-MacBook-Air ~ %
+
+
+12.we can also use the below command to navigate to any folder.
+
+sharath.bc@Sharath-BCs-MacBook-Air ~ % cd ~/Documents
+
+sharath.bc@Sharath-BCs-MacBook-Air Documents % pwd
+/Users/sharath.bc/Documents
+
+sharath.bc@Sharath-BCs-MacBook-Air Documents %
